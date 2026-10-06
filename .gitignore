@@ -4,6 +4,8 @@
 
 ## User settings
 xcuserdata/
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
 
 ## Obj-C/Swift specific
 *.hmap
