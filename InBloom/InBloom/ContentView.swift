@@ -34,15 +34,14 @@ struct ContentView: View
                 Spacer()
                 VStack
                 {
-                    
                     NavigationLink("Sign Up", destination: SignUpScreen())
-                    .buttonStyle(.borderedProminent)
-                    .buttonSizing(.flexible)
-                    .font(.system(size: 30))
+                        .buttonStyle(.borderedProminent)
+                        .buttonSizing(.flexible)
+                        .font(.system(size: 30))
                     NavigationLink("Log In", destination: LogInScreen())
-                    .buttonStyle(.borderedProminent)
-                    .buttonSizing(.flexible)
-                    .font(.system(size: 30))
+                        .buttonStyle(.borderedProminent)
+                        .buttonSizing(.flexible)
+                        .font(.system(size: 30))
                 }
                 .tint(.green)
                 .padding(.horizontal, 40)
