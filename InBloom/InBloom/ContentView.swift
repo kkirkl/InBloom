@@ -7,46 +7,30 @@
 
 import SwiftUI
 
+enum AuthContext
+{
+    case unauthenticated
+    case authenticated
+}
+
+
+
 struct ContentView: View
 {
+    @State private var authenticationStatus:AuthContext = .unauthenticated
     var body: some View
     {
-        NavigationStack
+        switch authenticationStatus
         {
-            VStack
-            {
-                HStack
-                {
-                    Text("In")
-                        .font(.system(size: 75))
-                        .bold()
-                        .kerning(5)
-                        .padding(-5)
-                    Text("Bloom")
-                        .font(.system(size: 75))
-                        .bold()
-                        .kerning(5)
-                        .foregroundStyle(.green)
+            case .unauthenticated:
+                StartScreen()
+                {(authStatus) in
+                    self.authenticationStatus = authStatus
                 }
-                .padding(.top, 60)
-                Spacer()
-                Text("[picture here]")
-                Spacer()
-                VStack
-                {
-                    NavigationLink("Sign Up", destination: SignUpScreen())
-                        .buttonStyle(.borderedProminent)
-                        .buttonSizing(.flexible)
-                        .font(.system(size: 30))
-                    NavigationLink("Log In", destination: LogInScreen())
-                        .buttonStyle(.borderedProminent)
-                        .buttonSizing(.flexible)
-                        .font(.system(size: 30))
-                }
-                .tint(.green)
-                .padding(.horizontal, 40)
-            }
-            .padding()
+                .transition(.push(from: .bottom))
+                
+            case .authenticated:
+                MainView()
         }
     }
 }

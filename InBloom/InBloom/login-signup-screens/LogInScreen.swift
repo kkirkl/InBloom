@@ -12,6 +12,7 @@ let textFieldCornerRadius:CGFloat = 5
 
 struct LogInScreen: View
 {
+    var authHandler: (AuthContext) -> Void
     @State private var emailFieldText:String = ""
     @State private var passwordFieldText:String = ""
     var body: some View
@@ -51,7 +52,10 @@ struct LogInScreen: View
             Spacer()
             Button("Continue")
             {
-                
+                withAnimation
+                {
+                    authHandler(.authenticated)
+                }
             }
             .buttonStyle(.borderedProminent)
             .buttonSizing(.flexible)
@@ -67,4 +71,7 @@ struct LogInScreen: View
 #Preview
 {
     LogInScreen()
+    {_ in
+        
+    }
 }
