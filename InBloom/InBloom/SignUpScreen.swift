@@ -12,6 +12,7 @@ let emailFormat:Regex = /\w+@\w+\.[a-zA-Z]{2,}/
 
 struct SignUpScreen: View
 {
+    var authHandler: (AuthContext) -> Void
     @State private var emailField:String = ""
     @State private var passwordField:String = ""
     @State private var confirmPasswordField:String = ""
@@ -82,7 +83,7 @@ struct SignUpScreen: View
             HStack
             {
                 Text("Already have an account?")
-                NavigationLink("Log in", destination: LogInScreen())
+                NavigationLink("Log in", destination: LogInScreen(authHandler: authHandler))
                     .underline()
             }
         }
@@ -121,4 +122,7 @@ struct SignUpScreen: View
 #Preview
 {
     SignUpScreen()
+    {_ in
+        
+    }
 }
