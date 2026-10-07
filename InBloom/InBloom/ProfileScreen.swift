@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileScreen: View
 {
+    @ObservedObject var navVM:NavigationViewModel
     var body: some View
     {
         VStack
@@ -39,5 +40,5 @@ struct ProfileScreen: View
 
 #Preview
 {
-    ProfileScreen()
+    ProfileScreen(navVM: NavigationViewModel())
 }
