@@ -27,7 +27,7 @@ struct CreateProfileScreen: View
                 ZStack
                 {
                     Circle()
-                        .fill(Color(red: 0.8, green: 0.8, blue: 0.8))
+                        .fill(Color(white: 0.8))
                         .stroke(personIconColor, lineWidth: 2.5)
                     Image(systemName: "person.fill")
                         .font(.system(size: 100))
