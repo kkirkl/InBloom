@@ -1,0 +1,1 @@
+The login and signup process is not fully functional at the moment, so you can get to the main part of the alpha by tapping "Continue" on the login screen. That will take you to the main screen regardless of what you enter in the textfields.
