@@ -29,7 +29,7 @@ struct JobTracker: View
                     {
                         Text("All")
                             .font(tagFont)
-                        Text("(0)")
+                        Text("(\(exampleJobs.count))")
                             .font(tagNumFont)
                     }
                     .padding(6)
@@ -84,7 +84,6 @@ struct JobTracker: View
                     }
                 }
             }
-//            .padding(.bottom, 1)
             Rectangle()
                 .fill(.gray)
                 .frame(height: 2)
@@ -95,7 +94,7 @@ struct JobTracker: View
                     JobListItem(navVM: navVM, job: job)
                 }
             }
-            Spacer()
+            .backgroundStyle(.clear)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 15)
