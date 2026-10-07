@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JobListItem: View
 {
+    @ObservedObject var navVM:NavigationViewModel
     @State var job:Job
     
     var body: some View
@@ -39,6 +40,7 @@ struct JobListItem: View
                         }
                         .buttonStyle(.bordered)
                         .foregroundStyle(Color(white: 0.5))
+                        .tint(.none)
                     }
                     Spacer()
                     Text("step \(job.completedItems()) of \(job.items.count)")
@@ -53,12 +55,14 @@ struct JobListItem: View
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .border(.gray, width: 2.5)
-        .padding(.horizontal, 15)
-        
+        .onTapGesture
+        {
+            navVM.pushJobDetail(job: job)
+        }
     }
 }
 
 #Preview
 {
-    JobListItem(job: Job(title: "Job Title", items: [], itemCompletion: [], isSaved: false, deadline: Date(timeIntervalSince1970: 10000000), link: "http://idklol.com"))
+    JobListItem(navVM: NavigationViewModel(), job: Job(title: "Job Title", items: [], itemCompletion: [], isSaved: false, deadline: Date(timeIntervalSince1970: 10000000), link: "http://idklol.com"))
 }

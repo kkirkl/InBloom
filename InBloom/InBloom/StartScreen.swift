@@ -9,10 +9,11 @@ import SwiftUI
 
 struct StartScreen: View
 {
+    @StateObject var navVM:NavigationViewModel = NavigationViewModel()
     var authHandler: (AuthContext) -> Void
     var body: some View
     {
-        NavigationStack
+        NavigationStack(path: $navVM.path)
         {
             VStack
             {
@@ -35,20 +36,39 @@ struct StartScreen: View
                 Spacer()
                 VStack
                 {
-                    NavigationLink("Sign Up", destination: SignUpScreen(authHandler: authHandler))
-                        .buttonStyle(.borderedProminent)
-                        .buttonSizing(.flexible)
-                        .font(.system(size: 30))
-                    NavigationLink("Log In", destination: LogInScreen(authHandler: authHandler))
-                        .buttonStyle(.borderedProminent)
-                        .buttonSizing(.flexible)
-                        .font(.system(size: 30))
+                    Button("Sign Up")
+                    {
+                        navVM.pushScreen(screen: .signup)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonSizing(.flexible)
+                    .font(.system(size: 30))
+                    Button("Log In")
+                    {
+                        navVM.pushScreen(screen: .login)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonSizing(.flexible)
+                    .font(.system(size: 30))
                 }
                 .tint(.green)
                 .padding(.horizontal, 40)
             }
             .padding()
+            .navigationDestination(for: Screen.self)
+            {(screen) in
+                switch screen
+                {
+                    case .login:
+                        LogInScreen(authHandler: authHandler)
+                    case .signup:
+                        SignUpScreen(authHandler: authHandler)
+                    default:
+                        self
+                }
+            }
         }
+        
     }
 }
 

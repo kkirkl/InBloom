@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Job
+struct Job: Hashable
 {
     var title:String
     var items:[String] // TODO maybe have default items

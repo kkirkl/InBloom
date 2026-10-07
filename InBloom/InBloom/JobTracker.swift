@@ -12,6 +12,8 @@ let tagNumFont:Font = .system(size: 24 * 0.6)
 
 struct JobTracker: View
 {
+    @ObservedObject var navVM:NavigationViewModel
+    let exampleJobs:[Job] = [Job(title: "Job Title 1", items: ["first task", "second task"], itemCompletion: [true, false], isSaved: false, deadline: Date(timeIntervalSince1970: 1795000000), link: ""), Job(title: "Job Title 2", items: ["wake up", "grab a brush"], itemCompletion: [false, false], isSaved: true, deadline: Date(timeIntervalSince1970: 1795000000), link: "")]
     var body: some View
     {
         VStack
@@ -83,6 +85,14 @@ struct JobTracker: View
                 }
             }
             Spacer()
+            VStack
+            {
+                ForEach(exampleJobs, id: \.self)
+                {(job) in
+                    JobListItem(navVM: navVM, job: job)
+                }
+            }
+            Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 15)
@@ -91,5 +101,5 @@ struct JobTracker: View
 
 #Preview
 {
-    JobTracker()
+    JobTracker(navVM: NavigationViewModel())
 }
