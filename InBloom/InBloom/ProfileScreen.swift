@@ -13,15 +13,27 @@ struct ProfileScreen: View
     {
         VStack
         {
-            HStack
+            HStack(alignment: .top)
             {
                 Image(systemName: "person.fill")
-                    .font(.system(size: 60))
+                    .font(.system(size: 80))
                     .foregroundStyle(Color(white: 0.3))
                     .background(Circle().inset(by: -10).fill(.gray))
+                    .padding(.leading, 10)
+                    .padding(.trailing, 15)
+                VStack(alignment: .leading)
+                {
+                    Text("Example User")
+                        .font(.system(size: 35))
+                    Text("UT Austin")
+                        .font(.system(size: 20))
+                        .foregroundStyle(Color(white: 0.4))
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             Spacer()
         }
+        .padding(.horizontal, 15)
     }
 }
 
