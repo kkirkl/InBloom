@@ -37,7 +37,7 @@ struct LogInScreen: View
                             .stroke(lineWidth: 3)
                             .foregroundStyle(.gray))
                 Spacer()
-                TextField("Password",
+                SecureField("Password",
                           text: $passwordFieldText,
                           prompt: Text(" \(Image(systemName: "lock.fill")) Password"))
                     .font(.system(size: textFieldFont))
