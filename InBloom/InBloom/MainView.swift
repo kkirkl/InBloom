@@ -35,8 +35,10 @@ struct MainView: View
             }
             Tab("", systemImage: "leaf.fill")
             {
-                Text("[beautiful garden here :D]")
-                    .font(.system(size: 30))
+                NavigationStack(path: $gardenNavVM.path)
+                {
+                    GardenScreen(navVM: gardenNavVM)
+                }
             }
             Tab("", systemImage: "person.circle")
             {
