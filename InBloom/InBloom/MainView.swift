@@ -40,8 +40,10 @@ struct MainView: View
             }
             Tab("", systemImage: "person.circle")
             {
-                Text("[your profile here!]")
-                    .font(.system(size: 30))
+                NavigationStack(path: $profileNavVM.path)
+                {
+                    ProfileScreen(navVM: profileNavVM)
+                }
             }
         }
         .tint(.green)

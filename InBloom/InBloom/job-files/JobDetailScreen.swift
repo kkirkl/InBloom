@@ -46,6 +46,7 @@ struct JobDetailScreen: View
                                 job = job.toggledSaved()
                             }
                             .buttonStyle(.bordered)
+                            .tint(.none)
                             .foregroundStyle(Color(white: 0.5))
                         }
                         Spacer()
