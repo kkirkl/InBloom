@@ -84,8 +84,11 @@ struct JobTracker: View
                     }
                 }
             }
-            Spacer()
-            VStack
+//            .padding(.bottom, 1)
+            Rectangle()
+                .fill(.gray)
+                .frame(height: 2)
+            ScrollView
             {
                 ForEach(exampleJobs, id: \.self)
                 {(job) in
