@@ -50,4 +50,11 @@ struct Job
         return Job(title: title, items: items, itemCompletion: itemCompletion,
                    isSaved: !isSaved, deadline: deadline, link: link)
     }
+    
+    static func getJobDeadlineString(date:Date) -> String
+    {
+        let dateFormatter:DateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        return dateFormatter.string(from: date)
+    }
 }
