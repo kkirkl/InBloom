@@ -7,16 +7,25 @@
 
 import SwiftUI
 
+enum TabScreen
+{
+    case jobs
+    case garden
+    case profile
+}
+
 struct MainView: View
 {
+    @State private var currentTab:TabScreen = .garden
     @StateObject var jobNavVM:NavigationViewModel = NavigationViewModel()
     @StateObject var gardenNavVM:NavigationViewModel = NavigationViewModel()
     @StateObject var profileNavVM:NavigationViewModel = NavigationViewModel()
+    
     var body: some View
     {
-        TabView
+        TabView(selection: $currentTab)
         {
-            Tab("", systemImage: "list.clipboard")
+            Tab("", systemImage: "list.clipboard", value: .jobs)
             {
                 NavigationStack(path: $jobNavVM.path)
                 {
@@ -33,14 +42,14 @@ struct MainView: View
                     }
                 }
             }
-            Tab("", systemImage: "leaf.fill")
+            Tab("", systemImage: "leaf.fill", value: .garden)
             {
                 NavigationStack(path: $gardenNavVM.path)
                 {
                     GardenScreen(navVM: gardenNavVM)
                 }
             }
-            Tab("", systemImage: "person.circle")
+            Tab("", systemImage: "person.circle", value: .profile)
             {
                 NavigationStack(path: $profileNavVM.path)
                 {
