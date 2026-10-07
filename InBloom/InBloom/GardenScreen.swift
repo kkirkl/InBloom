@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GardenScreen: View
 {
+    @ObservedObject var navVM:NavigationViewModel
     var body: some View
     {
         VStack
@@ -21,5 +22,5 @@ struct GardenScreen: View
 
 #Preview
 {
-    GardenScreen()
+    GardenScreen(navVM: NavigationViewModel())
 }
