@@ -32,7 +32,7 @@ struct ContentView: View
                 {(authStatus) in
                     self.authenticationStatus = authStatus
                 }
-                .transition(.push(from: .bottom))
+                .transition(.push(from: .trailing))
                 
             case .authenticated:
                 MainView()

@@ -9,74 +9,156 @@ import SwiftUI
 
 struct StartScreen: View
 {
+    let buttonWidth:CGFloat = 380
+    
     @StateObject var navVM:NavigationViewModel = NavigationViewModel()
-    @State private var showPrivacyScreen:Bool = true
+    @State private var showPrivacyScreen:Bool = false // change this after this screen is done!!!
     var authHandler: (AuthContext) -> Void
     var body: some View
     {
         if(showPrivacyScreen)
         {
             PrivacyStatement(showSelf: $showPrivacyScreen)
-                .transition(.push(from: .trailing))
         } else
         {
-            NavigationStack(path: $navVM.path)
+            ZStack
             {
-                VStack
+                Color(.backgroundDefault)
+                    .ignoresSafeArea()
+                VStack(spacing: 20)
                 {
-                    HStack
-                    {
-                        Text("In")
-                            .font(.system(size: 75))
-                            .bold()
-                            .kerning(5)
-                            .padding(-5)
-                        Text("Bloom")
-                            .font(.system(size: 75))
-                            .bold()
-                            .kerning(5)
-                            .foregroundStyle(.green)
-                    }
-                    .padding(.top, 60)
                     Spacer()
-                    Text("[picture here]")
                     Spacer()
                     VStack
                     {
-                        Button("Sign Up")
-                        {
-                            navVM.pushScreen(screen: .signup)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .buttonSizing(.flexible)
-                        .font(.system(size: 30))
-                        Button("Log In")
-                        {
-                            navVM.pushScreen(screen: .login)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .buttonSizing(.flexible)
-                        .font(.system(size: 30))
+                        Text("InBloom")
+                            .font(.system(size: 36, weight: .bold))
+                            .foregroundStyle(.textPrimary)
+                            .padding(.bottom, 2)
+                        Text("Plant your progress!")
+                            .font(.system(size: 18))
+                            .foregroundStyle(.textSecondary)
                     }
-                    .tint(.green)
-                    .padding(.horizontal, 40)
-                }
-                .padding()
-                .navigationDestination(for: Screen.self)
-                {(screen) in
-                    switch screen
+                    Image(.plantBloom)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 268)
+                        .padding(.bottom, 20)
+                    VStack(alignment: .center, spacing: 18)
                     {
-                    case .login:
-                        LogInScreen(authHandler: authHandler)
-                    case .signup:
-                        SignUpScreen(authHandler: authHandler)
-                    default:
-                        self
+                        Button(action: loginGoogle)
+                        {
+                            Image(.googleIcon)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 30)
+                                .padding(.trailing, 6)
+                            Text("Continue with Google")
+                                .font(.system(size: 20, weight: .semibold))
+                        }
+                        .frame(width: buttonWidth, height: 66)
+                        .tint(.textPrimary)
+                        .background
+                        {
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .fill(.backgroundSurface)
+                                .overlay
+                            {
+                                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                    .strokeBorder(lineWidth: 2)
+                                    .foregroundStyle(.borderDefault)
+                            }
+                            
+                        }
+                        Button(action: loginApple)
+                        {
+                            HStack
+                            {
+                                Image(systemName: "apple.logo")
+                                    .font(.system(size: 30))
+                                    .padding(.trailing, 6)
+                                Text("Continue with Apple")
+                                    .font(.system(size: 20, weight: .semibold))
+                            }
+                        }
+                        .frame(width: buttonWidth, height: 66)
+                        .tint(.textPrimary)
+                        .background
+                        {
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .fill(.backgroundSurface)
+                                .overlay
+                            {
+                                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                    .strokeBorder(lineWidth: 2)
+                                    .foregroundStyle(.borderDefault)
+                            }
+                            
+                        }
+                        Button(action: loginEmail)
+                        {
+                            HStack
+                            {
+                                Image(systemName: "envelope")
+                                    .font(.system(size: 26))
+                                    .padding(.trailing, 6)
+                                Text("Sign up with email")
+                                    .font(.system(size: 20, weight: .semibold))
+                            }
+                        }
+                        .frame(width: buttonWidth, height: 66)
+                        .tint(.textPrimary)
+                        .background
+                        {
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .fill(.backgroundSurface)
+                                .overlay
+                            {
+                                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                    .strokeBorder(lineWidth: 2)
+                                    .foregroundStyle(.borderDefault)
+                            }
+                            
+                        }
+                        HStack
+                        {
+                            Text("Already have an account?")
+                                .foregroundStyle(.textSecondary)
+                                .font(.system(size: 20))
+                            Button("Log in")
+                            {
+                                
+                            }
+                            .font(.system(size: 20, weight: .semibold))
+                            .tint(.brandPrimary)
+                        }
+                        .padding(.top, 15)
                     }
+                    Spacer()
+                    Button("Privacy statement")
+                    {
+                        
+                    }
+                    .tint(.textSecondary)
+                    .padding(.bottom, 20)
                 }
             }
-            
         }
+    }
+    
+    func loginGoogle()
+    {
+        
+    }
+    
+    func loginApple()
+    {
+        
+    }
+    
+    func loginEmail()
+    {
+        
     }
 }
 
