@@ -28,11 +28,8 @@ struct ContentView: View
         switch authenticationStatus
         {
             case .unauthenticated:
-                StartScreen()
-                {(authStatus) in
-                    self.authenticationStatus = authStatus
-                }
-                .transition(.push(from: .trailing))
+                StartScreen(authState: $authenticationStatus)
+                    .transition(.push(from: .bottom))
                 
             case .authenticated:
                 MainView()

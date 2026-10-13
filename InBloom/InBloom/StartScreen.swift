@@ -12,13 +12,15 @@ struct StartScreen: View
     let buttonWidth:CGFloat = 380
     
     @StateObject var navVM:NavigationViewModel = NavigationViewModel()
-    @State private var showPrivacyScreen:Bool = false // change this after this screen is done!!!
-    var authHandler: (AuthContext) -> Void
+    @State private var showPrivacyScreen:Bool = true
+    @Binding var authState:AuthContext
+    
     var body: some View
     {
         if(showPrivacyScreen)
         {
             PrivacyStatement(showSelf: $showPrivacyScreen)
+                .transition(.push(from: .top))
         } else
         {
             ZStack
@@ -137,7 +139,10 @@ struct StartScreen: View
                     Spacer()
                     Button("Privacy statement")
                     {
-                        
+                        withAnimation
+                        {
+                            showPrivacyScreen = true
+                        }
                     }
                     .tint(.textSecondary)
                     .padding(.bottom, 20)
@@ -148,24 +153,30 @@ struct StartScreen: View
     
     func loginGoogle()
     {
-        
+        temp()
     }
     
     func loginApple()
     {
-        
+        temp()
     }
     
     func loginEmail()
     {
-        
+        temp()
+    }
+    
+    func temp()
+    {
+        withAnimation
+        {
+            authState = .authenticated
+        }
     }
 }
 
 #Preview
 {
-    StartScreen()
-    {_ in
-        
-    }
+    @Previewable @State var auth:AuthContext = .unauthenticated
+    StartScreen(authState: $auth)
 }

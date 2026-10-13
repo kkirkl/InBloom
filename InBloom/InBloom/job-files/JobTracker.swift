@@ -13,91 +13,56 @@ let tagNumFont:Font = .system(size: 24 * 0.6)
 struct JobTracker: View
 {
     @ObservedObject var navVM:NavigationViewModel
-    let exampleJobs:[Job] = [Job(title: "Job Title 1", items: ["first task", "second task"], itemCompletion: [true, false], isSaved: false, deadline: Date(timeIntervalSince1970: 1795000000), link: ""), Job(title: "Job Title 2", items: ["wake up", "grab a brush"], itemCompletion: [false, false], isSaved: true, deadline: Date(timeIntervalSince1970: 1795000000), link: "")]
+//    let exampleJobs:[Job] = [Job(title: "Job Title 1", items: ["first task", "second task"], itemCompletion: [true, false], isSaved: false, deadline: Date(timeIntervalSince1970: 1795000000), link: ""), Job(title: "Job Title 2", items: ["wake up", "grab a brush"], itemCompletion: [false, false], isSaved: true, deadline: Date(timeIntervalSince1970: 1795000000), link: "")]
+    @State private var jobs:[Job] = []
     var body: some View
     {
         VStack
         {
-            VStack(alignment: .leading)
+            VStack(alignment: .leading, spacing: 10)
             {
-                Text("Job Tracker")
-                    .font(.system(size: 40))
-                Text("Jobs tracked: 0")
-                HStack
+                Text("Job tracker")
+                    .font(.system(size: 40, weight: .bold))
+                    .foregroundStyle(.textPrimary)
+                Text("0 jobs tracked")
+                    .foregroundStyle(.textSecondary)
+            }
+            .padding(.leading, 20)
+            .padding(.top, 20)
+            .padding(.bottom, 80)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            if(jobs.isEmpty)
+            {
+                VStack(spacing: 10)
                 {
-                    VStack
-                    {
-                        Text("All")
-                            .font(tagFont)
-                        Text("(\(exampleJobs.count))")
-                            .font(tagNumFont)
-                    }
-                    .padding(6)
-                    .overlay
-                    {
-                        RoundedRectangle(cornerRadius: 8)
-                            .strokeBorder(lineWidth: 3)
-                            .aspectRatio(1, contentMode: .fill)
-                    }
-                    .padding(.horizontal, 10)
-                    Spacer()
-                    VStack
-                    {
-                        Text("Saved")
-                            .font(tagFont)
-                        Text("(0)")
-                            .font(tagNumFont)
-                    }
-                    .padding(6)
-                    .overlay
-                    {
-                        RoundedRectangle(cornerRadius: 8)
-                            .strokeBorder(lineWidth: 3)
-                    }
-                    Spacer()
-                    VStack
-                    {
-                        Text("In Progress")
-                            .font(tagFont)
-                        Text("(0)")
-                            .font(tagNumFont)
-                    }
-                    .padding(6)
-                    .overlay
-                    {
-                        RoundedRectangle(cornerRadius: 8)
-                            .strokeBorder(lineWidth: 3)
-                    }
-                    Spacer()
-                    VStack
-                    {
-                        Text("Done")
-                            .font(tagFont)
-                        Text("(0)")
-                            .font(tagNumFont)
-                    }
-                    .padding(6)
-                    .overlay
-                    {
-                        RoundedRectangle(cornerRadius: 8)
-                            .strokeBorder(lineWidth: 3)
-                    }
+                    Text("No jobs yet")
+                        .foregroundStyle(.textPrimary)
+                        .font(.system(size: 20, weight: .semibold))
+                    Text("Tap \"+ Add a job\" to start tracking an application.")
+                        .foregroundStyle(.textSecondary)
+                        .multilineTextAlignment(.center)
                 }
+                .frame(width: 300)
+                Spacer()
             }
-            Rectangle()
-                .fill(.gray)
-                .frame(height: 2)
-            ScrollView
+            Button("+ Add a job")
             {
-                ForEach(exampleJobs, id: \.self)
-                {(job) in
-                    JobListItem(navVM: navVM, job: job)
-                }
             }
-            .backgroundStyle(.clear)
+            .font(.system(size: 20, weight: .semibold))
+            .frame(width: 380, height: 60)
+            .foregroundStyle(.textOnPrimary)
+            .background
+            {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .foregroundStyle(.brandPrimary)
+            }
+            .padding(.bottom, 20)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 15)
+    }
+    
+    func temp()
+    {
+        
     }
 }
 

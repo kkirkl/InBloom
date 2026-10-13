@@ -12,11 +12,34 @@ struct GardenScreen: View
     @ObservedObject var navVM:NavigationViewModel
     var body: some View
     {
-        VStack
+        ZStack
         {
-            Spacer()
-            Image(.emptyGardenPlaceholder)
+            VStack
+            {
+                Spacer()
+                Image(.gardenBackground)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            }
+            .ignoresSafeArea()
+            VStack
+            {
+                VStack(alignment: .leading, spacing: 10)
+                {
+                    Text("Your garden")
+                        .font(.system(size: 40, weight: .bold))
+                        .foregroundStyle(.textPrimary)
+                    Text("0 plants")
+                        .foregroundStyle(.textSecondary)
+                }
+                .padding(.leading, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 80)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                PlantView()
+            }
         }
+//        .ignoresSafeArea()
     }
 }
 

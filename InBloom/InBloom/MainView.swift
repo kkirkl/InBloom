@@ -34,10 +34,10 @@ struct MainView: View
                     {(screen) in
                         switch screen
                         {
-                            case .jobDetail(let job):
-                                JobDetailScreen(job: job)
-                            default:
-                                self
+                        case .jobDetail(let job):
+                            JobDetailScreen(job: job)
+                        default:
+                            self
                         }
                     }
                 }
