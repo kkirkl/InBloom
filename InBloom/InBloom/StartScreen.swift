@@ -65,11 +65,11 @@ struct StartScreen: View
                             RoundedRectangle(cornerRadius: 18, style: .continuous)
                                 .fill(.backgroundSurface)
                                 .overlay
-                            {
-                                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                    .strokeBorder(lineWidth: 2)
-                                    .foregroundStyle(.borderDefault)
-                            }
+                                {
+                                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                        .strokeBorder(lineWidth: 2)
+                                        .foregroundStyle(.borderDefault)
+                                }
                             
                         }
                         Button(action: loginApple)
@@ -90,11 +90,11 @@ struct StartScreen: View
                             RoundedRectangle(cornerRadius: 18, style: .continuous)
                                 .fill(.backgroundSurface)
                                 .overlay
-                            {
-                                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                    .strokeBorder(lineWidth: 2)
-                                    .foregroundStyle(.borderDefault)
-                            }
+                                {
+                                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                        .strokeBorder(lineWidth: 2)
+                                        .foregroundStyle(.borderDefault)
+                                }
                             
                         }
                         Button(action: loginEmail)
@@ -115,11 +115,11 @@ struct StartScreen: View
                             RoundedRectangle(cornerRadius: 18, style: .continuous)
                                 .fill(.backgroundSurface)
                                 .overlay
-                            {
-                                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                    .strokeBorder(lineWidth: 2)
-                                    .foregroundStyle(.borderDefault)
-                            }
+                                {
+                                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                        .strokeBorder(lineWidth: 2)
+                                        .foregroundStyle(.borderDefault)
+                                }
                             
                         }
                         HStack
