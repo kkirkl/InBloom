@@ -13,4 +13,14 @@ struct Profile
     var lastName:String
     var username:String
     var university:String //TODO might want this to be something else later
+    
+    var fullName:String
+    {
+        "\(firstname) \(lastName)"
+    }
+    
+    var initials:String
+    {
+        firstname.prefix(1).uppercased() + lastName.prefix(1).uppercased()
+    }
 }
