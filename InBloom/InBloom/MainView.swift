@@ -16,7 +16,7 @@ enum TabScreen
 
 struct MainView: View
 {
-    @State private var currentTab:TabScreen = .garden
+    @State private var currentTab:TabScreen = .jobs
     @StateObject var jobNavVM:NavigationViewModel = NavigationViewModel()
     @StateObject var gardenNavVM:NavigationViewModel = NavigationViewModel()
     @StateObject var profileNavVM:NavigationViewModel = NavigationViewModel()
