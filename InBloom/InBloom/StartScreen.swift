@@ -12,7 +12,7 @@ struct StartScreen: View
     let buttonWidth:CGFloat = 380
     
     @StateObject var navVM:NavigationViewModel = NavigationViewModel()
-    @State private var showPrivacyScreen:Bool = false // should be true unless testing
+    @State private var showPrivacyScreen:Bool = true // should be true unless testing
     @Binding var authState:AuthContext
     
     var body: some View

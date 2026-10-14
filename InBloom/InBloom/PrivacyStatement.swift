@@ -12,48 +12,52 @@ struct PrivacyStatement: View
     @Binding var showSelf:Bool
     var body: some View
     {
-        VStack
+        ZStack
         {
-            
-            Spacer()
-            Image(systemName: "checkmark.shield")
-                .font(.system(size: 50))
-                .frame(width: 110, height: 110)
-                .foregroundStyle(.brandPrimary)
-                .background
+            Color(.backgroundDefault)
+                .ignoresSafeArea()
+            VStack
+            {
+                Spacer()
+                Image(systemName: "checkmark.shield")
+                    .font(.system(size: 50))
+                    .frame(width: 110, height: 110)
+                    .foregroundStyle(.brandPrimary)
+                    .background
                 {
                     Circle()
                         .fill(.brandPrimaryLight)
                 }
                 .padding(.bottom, 18)
-            Text("Privacy Statement")
-                .font(.system(size: 32, weight: .bold))
-                .padding(.bottom, 12)
-                .foregroundStyle(.textPrimary)
-            Text("InBloom only collects your name and email, that’s it. We use this info to\ncreate your account and keep your garden growing. We never sell, rent, or share your data with third parties.")
-                .font(.system(size: 20))
-                .foregroundStyle(.textSecondary)
-                .multilineTextAlignment(.center)
-                .frame(width: 350)
-            Spacer()
-            Spacer()
-            Spacer()
-            Button
-            {
-                withAnimation
+                Text("Privacy Statement")
+                    .font(.system(size: 32, weight: .bold))
+                    .padding(.bottom, 12)
+                    .foregroundStyle(.textPrimary)
+                Text("InBloom only collects your name and email, that’s it. We use this info to\ncreate your account and keep your garden growing. We never sell, rent, or share your data with third parties.")
+                    .font(.system(size: 20))
+                    .foregroundStyle(.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .frame(width: 350)
+                Spacer()
+                Spacer()
+                Spacer()
+                Button
                 {
-                    showSelf = false
+                    withAnimation
+                    {
+                        showSelf = false
+                    }
+                } label:
+                {
+                    Text("Continue")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(.textOnPrimary)
+                        .frame(width: 356, height: 46)
                 }
-            } label:
-            {
-                Text("Continue")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.textOnPrimary)
-                    .frame(width: 356, height: 46)
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.roundedRectangle(radius: 18))
+                .tint(.brandPrimary)
             }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.roundedRectangle(radius: 18))
-            .tint(.brandPrimary)
         }
     }
     
