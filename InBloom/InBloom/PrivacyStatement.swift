@@ -24,11 +24,11 @@ struct PrivacyStatement: View
                     .frame(width: 110, height: 110)
                     .foregroundStyle(.brandPrimary)
                     .background
-                {
-                    Circle()
-                        .fill(.brandPrimaryLight)
-                }
-                .padding(.bottom, 18)
+                    {
+                        Circle()
+                            .fill(.brandPrimaryLight)
+                    }
+                    .padding(.bottom, 18)
                 Text("Privacy Statement")
                     .font(.system(size: 32, weight: .bold))
                     .padding(.bottom, 12)
