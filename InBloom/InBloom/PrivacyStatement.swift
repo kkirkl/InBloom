@@ -38,18 +38,22 @@ struct PrivacyStatement: View
             Spacer()
             Spacer()
             Spacer()
-            Button(action: continuePressed)
+            Button
+            {
+                withAnimation
+                {
+                    showSelf = false
+                }
+            } label:
             {
                 Text("Continue")
                     .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(.textOnPrimary)
+                    .frame(width: 356, height: 46)
             }
-            .frame(width: 380, height: 60)
-            .foregroundStyle(.textOnPrimary)
-            .background
-            {
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .foregroundStyle(.brandPrimary)
-            }
+            .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.roundedRectangle(radius: 18))
+            .tint(.brandPrimary)
         }
     }
     

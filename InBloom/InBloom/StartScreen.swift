@@ -12,7 +12,7 @@ struct StartScreen: View
     let buttonWidth:CGFloat = 380
     
     @StateObject var navVM:NavigationViewModel = NavigationViewModel()
-    @State private var showPrivacyScreen:Bool = true
+    @State private var showPrivacyScreen:Bool = false // should be true unless testing
     @Binding var authState:AuthContext
     
     var body: some View
@@ -48,79 +48,86 @@ struct StartScreen: View
                         .padding(.bottom, 20)
                     VStack(alignment: .center, spacing: 18)
                     {
-                        Button(action: loginGoogle)
+                        Button
                         {
-                            Image(.googleIcon)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: 30)
-                                .padding(.trailing, 6)
-                            Text("Continue with Google")
-                                .font(.system(size: 20, weight: .semibold))
+                            temp()
+                        } label:
+                        {
+                            Label()
+                            {
+                                Text("Continue with Google")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundStyle(.textPrimary)
+                            } icon:
+                            {
+                                Image(.googleIcon)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 30)
+                                    .padding(.trailing, 6)
+                            }
+                            .frame(width: 356, height: 52.5)
                         }
-                        .frame(width: buttonWidth, height: 66)
-                        .tint(.textPrimary)
-                        .background
+                        .buttonStyle(.borderedProminent)
+                        .buttonBorderShape(.roundedRectangle(radius: 18))
+                        .tint(.backgroundSurface)
+                        .overlay
                         {
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .fill(.backgroundSurface)
-                                .overlay
-                                {
-                                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                        .strokeBorder(lineWidth: 2)
-                                        .foregroundStyle(.borderDefault)
-                                }
-                            
+                            RoundedRectangle(cornerRadius: 18)
+                                .strokeBorder(lineWidth: 2)
+                                .foregroundStyle(.borderDefault)
                         }
-                        Button(action: loginApple)
+                        Button
                         {
-                            HStack
+                            temp()
+                        } label:
+                        {
+                            Label()
+                            {
+                                Text("Continue with Apple")
+                                    .font(.system(size: 20, weight: .semibold))
+                            } icon:
                             {
                                 Image(systemName: "apple.logo")
                                     .font(.system(size: 30))
-                                    .padding(.trailing, 6)
-                                Text("Continue with Apple")
-                                    .font(.system(size: 20, weight: .semibold))
                             }
+                            .foregroundStyle(.textPrimary)
+                            .frame(width: 356, height: 52.5)
                         }
-                        .frame(width: buttonWidth, height: 66)
-                        .tint(.textPrimary)
-                        .background
+                        .buttonStyle(.borderedProminent)
+                        .buttonBorderShape(.roundedRectangle(radius: 18))
+                        .tint(.backgroundSurface)
+                        .overlay
                         {
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .fill(.backgroundSurface)
-                                .overlay
-                                {
-                                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                        .strokeBorder(lineWidth: 2)
-                                        .foregroundStyle(.borderDefault)
-                                }
-                            
+                            RoundedRectangle(cornerRadius: 18)
+                                .strokeBorder(lineWidth: 2)
+                                .foregroundStyle(.borderDefault)
                         }
-                        Button(action: loginEmail)
+                        Button
                         {
-                            HStack
+                            temp()
+                        } label:
+                        {
+                            Label()
                             {
-                                Image(systemName: "envelope")
-                                    .font(.system(size: 26))
-                                    .padding(.trailing, 6)
                                 Text("Sign up with email")
                                     .font(.system(size: 20, weight: .semibold))
+                            } icon:
+                            {
+                                Image(systemName: "envelope")
+                                    .font(.system(size: 30))
                             }
+                            .foregroundStyle(.textPrimary)
+                            .frame(width: 356, height: 52.5)
                         }
-                        .frame(width: buttonWidth, height: 66)
-                        .tint(.textPrimary)
-                        .background
+                        .buttonStyle(.borderedProminent)
+                        .buttonBorderShape(.roundedRectangle(radius: 18))
+                        .tint(.backgroundSurface)
+                        .overlay
                         {
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .fill(.backgroundSurface)
-                                .overlay
-                                {
-                                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                        .strokeBorder(lineWidth: 2)
-                                        .foregroundStyle(.borderDefault)
-                                }
-                            
+                            RoundedRectangle(cornerRadius: 18)
+                                .strokeBorder(lineWidth: 2)
+                                .foregroundStyle(.borderDefault)
                         }
                         HStack
                         {
@@ -149,21 +156,6 @@ struct StartScreen: View
                 }
             }
         }
-    }
-    
-    func loginGoogle()
-    {
-        temp()
-    }
-    
-    func loginApple()
-    {
-        temp()
-    }
-    
-    func loginEmail()
-    {
-        temp()
     }
     
     func temp()
