@@ -13,7 +13,7 @@ let tagNumFont:Font = .system(size: 24 * 0.6)
 struct JobTracker: View
 {
     @ObservedObject var navVM:NavigationViewModel
-    @State private var showAddSheet:Bool = true // should be false when not testing
+    @State private var showAddSheet:Bool = false // should be false when not testing
     @State private var jobs:[Job] = []
     @State private var jobPasteField:String = ""
 //    let exampleJobs:[Job] = [Job(title: "Job Title 1", items: ["first task", "second task"], itemCompletion: [true, false], isSaved: false, deadline: Date(timeIntervalSince1970: 1795000000), link: ""), Job(title: "Job Title 2", items: ["wake up", "grab a brush"], itemCompletion: [false, false], isSaved: true, deadline: Date(timeIntervalSince1970: 1795000000), link: "")]
