@@ -13,6 +13,8 @@ struct Profile
     var lastName:String
     var username:String
     var university:String //TODO might want this to be something else later
+    var applicationsUnfinished:Int = 0
+    var applicationsFinished:Int = 0
     
     var fullName:String
     {

@@ -9,10 +9,34 @@ import SwiftUI
 
 struct ProfileScreen: View
 {
+    let screenTitleFont:Font = .system(size: 32, weight: .bold)
+    let initialsFont:Font = .system(size: 40, weight: .bold)
+    let fullNameFont:Font = .system(size: 22, weight: .semibold)
+    let usernameFont:Font = .system(size: 16)
+    let textFieldFont:Font = .system(size: 18.5)
+    let searchButtonFont:Font = .system(size: 18.5, weight: .semibold)
+    let rectangleCornerRadius:CGFloat = 16
+    
+    var roundedRectBackground: some View
+    {
+        RoundedRectangle(cornerRadius: rectangleCornerRadius)
+            .foregroundStyle(.backgroundSurface)
+            .overlay
+            {
+                RoundedRectangle(cornerRadius: rectangleCornerRadius)
+                    .strokeBorder(lineWidth: 1)
+                    .foregroundStyle(.borderDefault)
+            }
+    }
+    
     @ObservedObject var navVM:NavigationViewModel
     @State private var exampleProfile:Profile = Profile(firstname: "Jordan", lastName: "Lee",
                                                         username: "jordanlee",
-                                                        university: "UT Austin")
+                                                        university: "UT Austin",
+                                                        applicationsUnfinished: 2,
+                                                        applicationsFinished: 1)
+    @State private var usernameField:String = ""
+    
     var body: some View
     {
         ZStack(alignment: .leading)
@@ -22,13 +46,13 @@ struct ProfileScreen: View
             VStack(alignment: .leading)
             {
                 Text("Profile")
-                    .font(.system(size: 40, weight: .bold))
+                    .font(screenTitleFont)
                     .foregroundStyle(.textPrimary)
                 VStack
                 {
                     Text(exampleProfile.initials)
                         .frame(width: 100, height: 100)
-                        .font(.system(size: 40, weight: .bold))
+                        .font(initialsFont)
                         .foregroundStyle(.brandPrimary)
                         .background
                         {
@@ -37,12 +61,115 @@ struct ProfileScreen: View
                         }
                     Text(exampleProfile.fullName)
                         .foregroundStyle(.textPrimary)
-                        .font(.system(size: 24, weight: .semibold))
+                        .font(fullNameFont)
                     Text("@\(exampleProfile.username) · \(exampleProfile.university)")
-                        .font(.system(size: 18))
+                        .font(usernameFont)
                         .foregroundStyle(.textSecondary)
                 }
                 .frame(maxWidth: .infinity)
+                .padding(.bottom, 10)
+                HStack(spacing: 4)
+                {
+                    VStack(alignment: .leading)
+                    {
+                        Text("\(exampleProfile.applicationsFinished)")
+                            .font(screenTitleFont)
+                            .foregroundStyle(.textPrimary)
+                        Text("Plant\(exampleProfile.applicationsFinished == 1 ? "" : "s") grown")
+                            .font(usernameFont)
+                            .foregroundStyle(.textSecondary)
+                    }
+                    .padding(15)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background
+                    {
+                        roundedRectBackground
+                    }
+                    Spacer()
+                    VStack(alignment: .leading)
+                    {
+                        Text("\(exampleProfile.applicationsUnfinished)")
+                            .font(screenTitleFont)
+                            .foregroundStyle(.textPrimary)
+                        Text("Bloomed")
+                            .font(usernameFont)
+                            .foregroundStyle(.textSecondary)
+                    }
+                    .padding(15)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background
+                    {
+                        roundedRectBackground
+                    }
+                }
+                .padding(.bottom, 14)
+                VStack(alignment: .leading, spacing: 6)
+                {
+                    Text("Add a friend")
+                        .foregroundStyle(.textPrimary)
+                        .font(fullNameFont)
+                    HStack
+                    {
+                        VStack(alignment: .leading, spacing: 2)
+                        {
+                            Text("Find a friend by username")
+                                .font(usernameFont)
+                                .foregroundStyle(.textSecondary)
+                            TextField("username search field", text: $usernameField,
+                                      prompt: Text("Search by username"))
+                            .font(textFieldFont)
+                            .foregroundStyle(.textPrimary)
+                        }
+                        Button("Search")
+                        {
+                            //TODO
+                        }
+                        .font(searchButtonFont)
+                        .foregroundStyle(.brandPrimary)
+                    }
+                    .padding(18)
+                    .background
+                    {
+                        roundedRectBackground
+                    }
+                    Text("Type their username, then tap Search.")
+                        .font(usernameFont)
+                        .foregroundStyle(.textSecondary)
+                        .padding(.leading, 8)
+                }
+                .padding(.bottom, 14)
+                VStack(alignment: .leading, spacing: 14)
+                {
+                    Text("Friends (0)")
+                        .font(fullNameFont)
+                        .foregroundStyle(.textPrimary)
+                    Text("No friends yet.")
+                        .font(textFieldFont)
+                        .foregroundStyle(.textSecondary)
+                }
+                Button
+                {
+                    
+                } label:
+                {
+                    HStack
+                    {
+                        Image(systemName: "play.circle")
+                            .foregroundStyle(.brandPrimary)
+                            .font(.system(size: 22))
+                        Text("Replay tutorial")
+                            .font(textFieldFont)
+                            .foregroundStyle(.textPrimary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.brandPrimary)
+                    }
+                    .padding(16)
+                    .background
+                    {
+                        roundedRectBackground
+                    }
+                }
                 Spacer()
             }
             .padding(20)
