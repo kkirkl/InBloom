@@ -16,17 +16,14 @@ struct ProfileScreen: View
     let textFieldFont:Font = .system(size: 18.5)
     let searchButtonFont:Font = .system(size: 18.5, weight: .semibold)
     let rectangleCornerRadius:CGFloat = 16
+    let rectangleBorderWidth:CGFloat = 1
     
-    var roundedRectBackground: some View
+    var profileRectBackground: some View
     {
-        RoundedRectangle(cornerRadius: rectangleCornerRadius)
-            .foregroundStyle(.backgroundSurface)
-            .overlay
-            {
-                RoundedRectangle(cornerRadius: rectangleCornerRadius)
-                    .strokeBorder(lineWidth: 1)
-                    .foregroundStyle(.borderDefault)
-            }
+        RoundedRectBackground(color: .backgroundSurface,
+                              borderColor: .borderDefault,
+                              cornerRadius: rectangleCornerRadius,
+                              borderWidth: rectangleBorderWidth)
     }
     
     @ObservedObject var navVM:NavigationViewModel
@@ -83,7 +80,7 @@ struct ProfileScreen: View
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background
                     {
-                        roundedRectBackground
+                        profileRectBackground
                     }
                     Spacer()
                     VStack(alignment: .leading)
@@ -99,7 +96,7 @@ struct ProfileScreen: View
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background
                     {
-                        roundedRectBackground
+                        profileRectBackground
                     }
                 }
                 .padding(.bottom, 14)
@@ -130,7 +127,7 @@ struct ProfileScreen: View
                     .padding(18)
                     .background
                     {
-                        roundedRectBackground
+                        profileRectBackground
                     }
                     Text("Type their username, then tap Search.")
                         .font(usernameFont)
@@ -167,7 +164,7 @@ struct ProfileScreen: View
                     .padding(16)
                     .background
                     {
-                        roundedRectBackground
+                        profileRectBackground
                     }
                 }
                 Spacer()
