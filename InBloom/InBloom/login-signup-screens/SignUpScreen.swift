@@ -8,121 +8,233 @@
 import SwiftUI
 import FirebaseAuth
 
-let emailFormat:Regex = /\w+@\w+\.[a-zA-Z]{2,}/
+let emailFormat:Regex = /(\w\.*)+\w+@\w+\.[a-zA-Z]{2,}/
 
 struct SignUpScreen: View
 {
-    var authHandler: (AuthContext) -> Void
+    @ObservedObject var navVM:NavigationViewModel
+    @Binding var authState:AuthContext
     @State private var emailField:String = ""
+    @State private var emailErrorMessage:String = ""
     @State private var passwordField:String = ""
+    @State private var passwordFieldShowError:Bool = false
     @State private var confirmPasswordField:String = ""
-    @State private var statusText:String = ""
-    var body: some View
+    @State private var confirmPasswordErrorMessage:String = ""
+    var isEmailError:Bool
     {
-        VStack
-        {
-            Text("Create your account!")
-                .font(.system(size: 50))
-                .padding(.top, 50)
-                .padding(.horizontal, 15)
-                .padding(.bottom, 0)
-                .multilineTextAlignment(.center)
-            VStack
-            {
-                TextField("Email",
-                          text: $emailField,
-                          prompt: Text("\(Image(systemName: "envelope.fill"))Email"))
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .font(.system(size: textFieldFont))
-                    .padding(5)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: textFieldCornerRadius)
-                            .stroke(lineWidth: 3)
-                            .foregroundStyle(.gray))
-                Spacer()
-                SecureField("Password",
-                          text: $passwordField,
-                          prompt: Text(" \(Image(systemName: "lock.fill")) Password"))
-                    .font(.system(size: textFieldFont))
-                    .padding(5)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: textFieldCornerRadius)
-                            .stroke(lineWidth: 3)
-                            .foregroundStyle(.gray))
-                Spacer()
-                SecureField("Confirm Password",
-                          text: $confirmPasswordField,
-                          prompt: Text(" \(Image(systemName: "lock.fill")) Confirm password"))
-                    .font(.system(size: textFieldFont))
-                    .padding(5)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: textFieldCornerRadius)
-                            .stroke(lineWidth: 3)
-                            .foregroundStyle(.gray))
-            }
-            .onSubmit
-            {
-                handleSubmit()
-            }
-            .frame(height: 100)
-            .padding()
-            Text(statusText)
-                .multilineTextAlignment(.center) //TODO style this
-            Spacer()
-            Button("Continue")
-            {
-                handleSubmit()
-            }
-            .buttonStyle(.borderedProminent)
-            .buttonSizing(.flexible)
-            .font(.system(size: 25))
-            .tint(.green)
-            .frame(width: 250)
-            .padding(.bottom, 50)
-            HStack
-            {
-                Text("Already have an account?")
-                NavigationLink("Log in", destination: LogInScreen(authHandler: authHandler))
-                    .underline()
-            }
-        }
-        .padding(.horizontal, 15)
-        .ignoresSafeArea(.keyboard)
+        !emailErrorMessage.isEmpty
+    }
+    var isConfirmPasswordError:Bool
+    {
+        !confirmPasswordErrorMessage.isEmpty
+    }
+    var isButtonDisabled:Bool
+    {
+        emailField.isEmpty || passwordField.isEmpty || confirmPasswordField.isEmpty
     }
     
-    func handleSubmit()
+    let firestoreMinPasswordLength:Int = 6
+    let passwordMatchError:String = "Passwords must match"
+    let passwordLengthError:String = "Password must be at least 6 characters long"
+    let errorIcon:String = "exclamationmark.circle"
+    let screenTitleFont:Font = .system(size: 28, weight: .bold)
+    let buttonFont:Font = .system(size: 18, weight: .semibold)
+    let subtitleFont:Font = .system(size: 16)
+    let textFieldLabelFont:Font = .system(size: 14)
+    let textFieldFont:Font = .system(size: 16)
+    let textFieldPadding:CGFloat = 16
+    let textFieldSpacing:CGFloat = 10
+    let errorMessageSpacing:CGFloat = 3
+    let rectCornerRadius:CGFloat = 12
+    let rectBorderWidth:CGFloat = 1
+    let rectBorderErrorWidth:CGFloat = 2
+    
+    func borderColorIfError(_ hasError:Bool) -> Color
     {
+        return hasError ? .stateError : .borderDefault
+    }
+    
+    func borderWidthIfError(_ hasError:Bool) -> CGFloat
+    {
+        hasError ? rectBorderErrorWidth : rectBorderWidth
+    }
+    
+    var body: some View
+    {
+        ZStack
+        {
+            Color(.backgroundDefault)
+                .ignoresSafeArea()
+            VStack(alignment: .leading)
+            {
+                Text("Create your account!")
+                    .font(screenTitleFont)
+                    .foregroundStyle(.textPrimary)
+                    .padding(.bottom, 6)
+                Text("Just a few quick things to get started")
+                    .font(subtitleFont)
+                    .foregroundStyle(.textSecondary)
+                    .padding(.bottom, 28)
+                VStack(spacing: textFieldSpacing)
+                {
+                    VStack(alignment: .leading, spacing: errorMessageSpacing)
+                    {
+                        VStack(alignment: .leading, spacing: 2)
+                        {
+                            Text("Email")
+                                .font(textFieldLabelFont)
+                                .foregroundStyle(.textSecondary)
+                            TextField("email field", text: $emailField, prompt: Text("Email address"))
+                                .font(textFieldFont)
+                                .textContentType(.emailAddress)
+                                .foregroundStyle(.textPrimary)
+                                .textInputAutocapitalization(.never)
+                        }
+                        .padding(textFieldPadding)
+                        .background
+                        {
+                            RoundedRectBackground(color: .backgroundSurface,
+                                cornerRadius: rectCornerRadius,
+                                borderColor: borderColorIfError(isEmailError),
+                                borderWidth: borderWidthIfError(isEmailError))
+                        }
+                        if(!emailErrorMessage.isEmpty)
+                        {
+                            HStack
+                            {
+                                Image(systemName: errorIcon)
+                                Text(emailErrorMessage)
+                                
+                            }
+                            .font(textFieldLabelFont)
+                            .foregroundStyle(.stateError)
+                            .padding(.leading, 6)
+                        }
+                    }
+                    VStack(alignment: .leading, spacing: 2)
+                    {
+                        Text("Password")
+                            .font(textFieldLabelFont)
+                            .foregroundStyle(.textSecondary)
+                        SecureField("password field", text: $passwordField, prompt: Text("Password"))
+                            .font(textFieldFont)
+                            .textContentType(.newPassword)
+                            .foregroundStyle(.textPrimary)
+                    }
+                    .padding(textFieldPadding)
+                    .background
+                    {
+                        RoundedRectBackground(color: .backgroundSurface,
+                            cornerRadius: rectCornerRadius,
+                            borderColor: borderColorIfError(passwordFieldShowError),
+                            borderWidth: borderWidthIfError(passwordFieldShowError))
+                    }
+                    VStack(alignment: .leading, spacing: errorMessageSpacing)
+                    {
+                        VStack(alignment: .leading, spacing: 2)
+                        {
+                            Text("Confirm password")
+                                .font(textFieldLabelFont)
+                                .foregroundStyle(.textSecondary)
+                            SecureField("confirm password field", text: $confirmPasswordField,
+                                      prompt: Text("Confirm password"))
+                                .font(textFieldFont)
+                                .textContentType(.newPassword)
+                                .foregroundStyle(.textPrimary)
+                        }
+                        .padding(textFieldPadding)
+                        .background
+                        {
+                            RoundedRectBackground(color: .backgroundSurface,
+                                cornerRadius: rectCornerRadius,
+                                borderColor: borderColorIfError(isConfirmPasswordError),
+                                borderWidth: borderWidthIfError(isConfirmPasswordError))
+                        }
+                        if(!confirmPasswordErrorMessage.isEmpty)
+                        {
+                            HStack
+                            {
+                                Image(systemName: errorIcon)
+                                Text(confirmPasswordErrorMessage)
+                                
+                            }
+                            .font(textFieldLabelFont)
+                            .foregroundStyle(.stateError)
+                            .padding(.leading, 6)
+                        }
+                    }
+                }
+                Spacer()
+                HStack
+                {
+                    Text("Already have an account?")
+                        .foregroundStyle(.textSecondary)
+                        .font(subtitleFont)
+                    Button("Log in")
+                    {
+                        
+                    }
+                    .font(subtitleFont)
+                    .fontWeight(.semibold)
+                    .tint(.brandPrimary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 40)
+                Button
+                {
+                    handleContinue()
+                } label:
+                {
+                    Text("Continue")
+                        .font(buttonFont)
+                        .foregroundStyle(isButtonDisabled ? .textDisabled : .textOnPrimary)
+                        .padding(.vertical, 18)
+                        .frame(maxWidth: .infinity)
+                        .background
+                        {
+                            RoundedRectBackground(color: isButtonDisabled ? .stateDisabled : .brandPrimary, cornerRadius: 14)
+                        }
+                        
+                }
+                .disabled(isButtonDisabled)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .padding(20)
+            
+        }
+    }
+    
+    func handleContinue()
+    {
+        emailErrorMessage = ""
+        passwordFieldShowError = false
+        confirmPasswordErrorMessage = ""
         do
         {
             if let match:Regex.Match = try emailFormat.wholeMatch(in: emailField)
             {
-                Auth.auth().createUser(withEmail: emailField, password: passwordField)
-                {(result, error) in
-                    if let error
-                    {
-                        statusText = error.localizedDescription
-                    } else
-                    {
-                        statusText = "acount added!"
-                    }
-                }
+                
             } else
             {
-                statusText = "invalid email"
+                emailErrorMessage = "Invalid email"
             }
         } catch
         {
-            
         }
-        
+        if passwordField != confirmPasswordField
+        {
+            confirmPasswordErrorMessage = passwordMatchError
+        } else if passwordField.count < firestoreMinPasswordLength
+        {
+            passwordFieldShowError = true
+            confirmPasswordErrorMessage = passwordLengthError
+        }
     }
 }
 
 #Preview
 {
-    SignUpScreen()
-    {_ in
-        
-    }
+    @Previewable @StateObject var navVM:NavigationViewModel = NavigationViewModel()
+    @Previewable @State var test:AuthContext = .unauthenticated
+    SignUpScreen(navVM: navVM, authState: $test)
 }
