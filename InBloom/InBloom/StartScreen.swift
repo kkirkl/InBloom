@@ -23,136 +23,149 @@ struct StartScreen: View
                 .transition(.push(from: .top))
         } else
         {
-            ZStack
+            NavigationStack(path: $navVM.path)
             {
-                Color(.backgroundDefault)
-                    .ignoresSafeArea()
-                VStack(spacing: 20)
+                ZStack
                 {
-                    Spacer()
-                    Spacer()
-                    VStack
+                    Color(.backgroundDefault)
+                        .ignoresSafeArea()
+                    VStack(spacing: 20)
                     {
-                        Text("InBloom")
-                            .font(.system(size: 36, weight: .bold))
-                            .foregroundStyle(.textPrimary)
-                            .padding(.bottom, 2)
-                        Text("Plant your progress!")
-                            .font(.system(size: 18))
-                            .foregroundStyle(.textSecondary)
-                    }
-                    Image(.plantBloom)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 268)
-                        .padding(.bottom, 20)
-                    VStack(alignment: .center, spacing: 18)
-                    {
-                        Button
+                        Spacer()
+                        Spacer()
+                        VStack
                         {
-                            temp()
-                        } label:
-                        {
-                            Label()
-                            {
-                                Text("Continue with Google")
-                                    .font(.system(size: 20, weight: .semibold))
-                                    .foregroundStyle(.textPrimary)
-                            } icon:
-                            {
-                                Image(.googleIcon)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 30)
-                                    .padding(.trailing, 6)
-                            }
-                            .frame(width: 356, height: 52.5)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.roundedRectangle(radius: 18))
-                        .tint(.backgroundSurface)
-                        .overlay
-                        {
-                            RoundedRectangle(cornerRadius: 18)
-                                .strokeBorder(lineWidth: 2)
-                                .foregroundStyle(.borderDefault)
-                        }
-                        Button
-                        {
-                            temp()
-                        } label:
-                        {
-                            Label()
-                            {
-                                Text("Continue with Apple")
-                                    .font(.system(size: 20, weight: .semibold))
-                            } icon:
-                            {
-                                Image(systemName: "apple.logo")
-                                    .font(.system(size: 30))
-                            }
-                            .foregroundStyle(.textPrimary)
-                            .frame(width: 356, height: 52.5)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.roundedRectangle(radius: 18))
-                        .tint(.backgroundSurface)
-                        .overlay
-                        {
-                            RoundedRectangle(cornerRadius: 18)
-                                .strokeBorder(lineWidth: 2)
-                                .foregroundStyle(.borderDefault)
-                        }
-                        Button
-                        {
-                            temp()
-                        } label:
-                        {
-                            Label()
-                            {
-                                Text("Sign up with email")
-                                    .font(.system(size: 20, weight: .semibold))
-                            } icon:
-                            {
-                                Image(systemName: "envelope")
-                                    .font(.system(size: 30))
-                            }
-                            .foregroundStyle(.textPrimary)
-                            .frame(width: 356, height: 52.5)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.roundedRectangle(radius: 18))
-                        .tint(.backgroundSurface)
-                        .overlay
-                        {
-                            RoundedRectangle(cornerRadius: 18)
-                                .strokeBorder(lineWidth: 2)
-                                .foregroundStyle(.borderDefault)
-                        }
-                        HStack
-                        {
-                            Text("Already have an account?")
+                            Text("InBloom")
+                                .font(.system(size: 36, weight: .bold))
+                                .foregroundStyle(.textPrimary)
+                                .padding(.bottom, 2)
+                            Text("Plant your progress!")
+                                .font(.system(size: 18))
                                 .foregroundStyle(.textSecondary)
-                                .font(.system(size: 20))
-                            Button("Log in")
-                            {
-                                
-                            }
-                            .font(.system(size: 20, weight: .semibold))
-                            .tint(.brandPrimary)
                         }
-                        .padding(.top, 15)
-                    }
-                    Spacer()
-                    Button("Privacy statement")
-                    {
-                        withAnimation
+                        Image(.plantBloom)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 268)
+                            .padding(.bottom, 20)
+                        VStack(alignment: .center, spacing: 18)
                         {
-                            showPrivacyScreen = true
+                            Button
+                            {
+                                temp()
+                            } label:
+                            {
+                                Label()
+                                {
+                                    Text("Continue with Google")
+                                        .font(.system(size: 20, weight: .semibold))
+                                        .foregroundStyle(.textPrimary)
+                                } icon:
+                                {
+                                    Image(.googleIcon)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(height: 30)
+                                        .padding(.trailing, 6)
+                                }
+                                .frame(width: 356, height: 52.5)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .buttonBorderShape(.roundedRectangle(radius: 18))
+                            .tint(.backgroundSurface)
+                            .overlay
+                            {
+                                RoundedRectangle(cornerRadius: 18)
+                                    .strokeBorder(lineWidth: 2)
+                                    .foregroundStyle(.borderDefault)
+                            }
+                            Button
+                            {
+                                temp()
+                            } label:
+                            {
+                                Label()
+                                {
+                                    Text("Continue with Apple")
+                                        .font(.system(size: 20, weight: .semibold))
+                                } icon:
+                                {
+                                    Image(systemName: "apple.logo")
+                                        .font(.system(size: 30))
+                                }
+                                .foregroundStyle(.textPrimary)
+                                .frame(width: 356, height: 52.5)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .buttonBorderShape(.roundedRectangle(radius: 18))
+                            .tint(.backgroundSurface)
+                            .overlay
+                            {
+                                RoundedRectangle(cornerRadius: 18)
+                                    .strokeBorder(lineWidth: 2)
+                                    .foregroundStyle(.borderDefault)
+                            }
+                            Button
+                            {
+                                navVM.pushScreen(screen: .signup)
+                            } label:
+                            {
+                                Label()
+                                {
+                                    Text("Sign up with email")
+                                        .font(.system(size: 20, weight: .semibold))
+                                } icon:
+                                {
+                                    Image(systemName: "envelope")
+                                        .font(.system(size: 30))
+                                }
+                                .foregroundStyle(.textPrimary)
+                                .frame(width: 356, height: 52.5)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .buttonBorderShape(.roundedRectangle(radius: 18))
+                            .tint(.backgroundSurface)
+                            .overlay
+                            {
+                                RoundedRectangle(cornerRadius: 18)
+                                    .strokeBorder(lineWidth: 2)
+                                    .foregroundStyle(.borderDefault)
+                            }
+                            HStack
+                            {
+                                Text("Already have an account?")
+                                    .foregroundStyle(.textSecondary)
+                                    .font(.system(size: 20))
+                                Button("Log in")
+                                {
+                                    
+                                }
+                                .font(.system(size: 20, weight: .semibold))
+                                .tint(.brandPrimary)
+                            }
+                            .padding(.top, 15)
                         }
+                        Spacer()
+                        Button("Privacy statement")
+                        {
+                            withAnimation
+                            {
+                                showPrivacyScreen = true
+                            }
+                        }
+                        .tint(.textSecondary)
+                        .padding(.bottom, 20)
                     }
-                    .tint(.textSecondary)
-                    .padding(.bottom, 20)
+                }
+                .navigationDestination(for: Screen.self)
+                {(screen) in
+                    switch screen
+                    {
+                        case .signup:
+                            SignUpScreen(navVM: navVM, authState: $authState)
+                        default:
+                            self
+                    }
                 }
             }
         }
