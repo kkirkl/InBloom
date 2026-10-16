@@ -59,9 +59,21 @@ struct ConfirmEmail: View
                                 {
                                     RoundedRectBackground(color: .backgroundSurface, cornerRadius: rectCornerRadius, borderColor: .borderDefault, borderWidth: 1)
                                 }
-//                                .onReceive(nums[index])
-//                                {(newValue) in
-//                                    
+//                                .onChange(of: nums[index])
+//                                {(oldValue, newValue) in
+//                                    do
+//                                    {
+//                                        if let match:Regex.Match = try digits.wholeMatch(in: newValue)
+//                                        {
+//                                            focusedDigit += focusedDigit == nums.count - 1 ? 0 : 1
+//                                        } else
+//                                        {
+//                                            nums[index] = oldValue
+//                                        }
+//                                    } catch
+//                                    {
+//                                        
+//                                    }
 //                                }
                         }
                     }
