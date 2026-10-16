@@ -21,8 +21,8 @@ struct ProfileScreen: View
     var profileRectBackground: some View
     {
         RoundedRectBackground(color: .backgroundSurface,
-                              borderColor: .borderDefault,
                               cornerRadius: rectangleCornerRadius,
+                              borderColor: .borderDefault,
                               borderWidth: rectangleBorderWidth)
     }
     
@@ -116,6 +116,7 @@ struct ProfileScreen: View
                                       prompt: Text("Search by username"))
                             .font(textFieldFont)
                             .foregroundStyle(.textPrimary)
+                            .textInputAutocapitalization(.never)
                         }
                         Button("Search")
                         {
