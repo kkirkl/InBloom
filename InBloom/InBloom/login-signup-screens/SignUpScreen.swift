@@ -14,6 +14,8 @@ struct SignUpScreen: View
 {
     @ObservedObject var navVM:NavigationViewModel
     @Binding var authState:AuthContext
+    @FocusState private var currentFocus:FieldType?
+    
     @State private var emailField:String = ""
     @State private var emailErrorMessage:String = ""
     
@@ -56,14 +58,11 @@ struct SignUpScreen: View
     let rectBorderWidth:CGFloat = 1
     let rectBorderErrorWidth:CGFloat = 2
     
-    func borderColorIfError(_ hasError:Bool) -> Color
+    enum FieldType
     {
-        return hasError ? .stateError : .borderDefault
-    }
-    
-    func borderWidthIfError(_ hasError:Bool) -> CGFloat
-    {
-        hasError ? rectBorderErrorWidth : rectBorderWidth
+        case email
+        case password
+        case confirmPassword
     }
     
     var body: some View
@@ -96,6 +95,7 @@ struct SignUpScreen: View
                                 .textContentType(.emailAddress)
                                 .foregroundStyle(.textPrimary)
                                 .textInputAutocapitalization(.never)
+                                .focused($currentFocus, equals: .email)
                         }
                         .padding(textFieldPadding)
                         .background
@@ -104,6 +104,10 @@ struct SignUpScreen: View
                                 cornerRadius: rectCornerRadius,
                                 borderColor: borderColorIfError(isEmailError),
                                 borderWidth: borderWidthIfError(isEmailError))
+                        }
+                        .onTapGesture
+                        {
+                            currentFocus = .email
                         }
                         if(!emailErrorMessage.isEmpty)
                         {
@@ -129,6 +133,7 @@ struct SignUpScreen: View
                                 .font(textFieldFont)
                                 .textContentType(.newPassword)
                                 .foregroundStyle(.textPrimary)
+                                .focused($currentFocus, equals: .password)
                         }
                         Button
                         {
@@ -147,6 +152,10 @@ struct SignUpScreen: View
                             borderColor: borderColorIfError(passwordFieldShowError),
                             borderWidth: borderWidthIfError(passwordFieldShowError))
                     }
+                    .onTapGesture
+                    {
+                        currentFocus = .confirmPassword
+                    }
                     VStack(alignment: .leading, spacing: errorMessageSpacing)
                     {
                         HStack
@@ -160,14 +169,14 @@ struct SignUpScreen: View
                                     .font(textFieldFont)
                                     .textContentType(.newPassword)
                                     .foregroundStyle(.textPrimary)
-                                
+                                    .focused($currentFocus, equals: .confirmPassword)
                             }
                             Button
                             {
                                 hideConfirmPassword.toggle()
                             } label:
                             {
-                                Image(systemName: hidePassword ? showPasswordIcon : hidePasswordIcon)
+                                Image(systemName: hideConfirmPassword ? showPasswordIcon : hidePasswordIcon)
                                     .foregroundStyle(.textSecondary)
                             }
                         }
@@ -178,6 +187,10 @@ struct SignUpScreen: View
                                 cornerRadius: rectCornerRadius,
                                 borderColor: borderColorIfError(isConfirmPasswordError),
                                 borderWidth: borderWidthIfError(isConfirmPasswordError))
+                        }
+                        .onTapGesture
+                        {
+                            currentFocus = .confirmPassword
                         }
                         if(!confirmPasswordErrorMessage.isEmpty)
                         {
@@ -232,11 +245,27 @@ struct SignUpScreen: View
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding(20)
             .ignoresSafeArea(.keyboard)
+            .onSubmit(handleContinue)
         }
+        .onTapGesture
+        {
+            currentFocus = nil
+        }
+    }
+    
+    func borderColorIfError(_ hasError:Bool) -> Color
+    {
+        return hasError ? .stateError : .borderDefault
+    }
+    
+    func borderWidthIfError(_ hasError:Bool) -> CGFloat
+    {
+        hasError ? rectBorderErrorWidth : rectBorderWidth
     }
     
     func handleContinue()
     {
+        currentFocus = nil
         emailErrorMessage = ""
         passwordFieldShowError = false
         confirmPasswordErrorMessage = ""
