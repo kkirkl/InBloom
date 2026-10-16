@@ -14,6 +14,7 @@ struct ConfirmEmail: View
     @State private var nums:[String] = Array(repeating: "", count: verificationCodeLength)
     @FocusState private var focusedDigit:Int?
     
+    let digits:Regex = /[0-9]/
     let screenTitleFont:Font = .system(size: 28, weight: .bold)
     let subtitleFont:Font = .system(size: 16)
     let rectCornerRadius:CGFloat = 12
@@ -58,7 +59,10 @@ struct ConfirmEmail: View
                                 {
                                     RoundedRectBackground(color: .backgroundSurface, cornerRadius: rectCornerRadius, borderColor: .borderDefault, borderWidth: 1)
                                 }
-                                .on
+//                                .onReceive(nums[index])
+//                                {(newValue) in
+//                                    
+//                                }
                         }
                     }
                 }
