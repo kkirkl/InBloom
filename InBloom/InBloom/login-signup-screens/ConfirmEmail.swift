@@ -14,12 +14,24 @@ struct ConfirmEmail: View
     @State private var nums:[String] = Array(repeating: "", count: verificationCodeLength)
     @FocusState private var focusedDigit:Int?
     
-    let digits:Regex = /[0-9]/
+    let digits:Regex = /[0-9]+/
     let screenTitleFont:Font = .system(size: 28, weight: .bold)
     let subtitleFont:Font = .system(size: 16)
     let rectCornerRadius:CGFloat = 12
     let email:String
+    let buttonFont:Font = .system(size: 18, weight: .semibold)
+    let buttonCornerRadius:CGFloat = 14
     
+    var isButtonDisabled:Bool
+    {
+        var numsFilled:Bool = true
+        for digit in nums
+        {
+            numsFilled = !digit.isEmpty && numsFilled
+            guard numsFilled else {break}
+        }
+        return !numsFilled
+    }
     
     var body: some View
     {
@@ -49,6 +61,10 @@ struct ConfirmEmail: View
                         ForEach(nums.indices, id: \.self)
                         {(index) in
                             TextField("code field \(index)", text: $nums[index], prompt: Text("•"))
+                                .onTapGesture
+                                {
+                                    focusedDigit = getLeftmostIndex()
+                                }
                                 .textContentType(.oneTimeCode)
                                 .keyboardType(.numberPad)
                                 .multilineTextAlignment(.center)
@@ -59,30 +75,74 @@ struct ConfirmEmail: View
                                 {
                                     RoundedRectBackground(color: .backgroundSurface, cornerRadius: rectCornerRadius, borderColor: .borderDefault, borderWidth: 1)
                                 }
-//                                .onChange(of: nums[index])
-//                                {(oldValue, newValue) in
-//                                    do
-//                                    {
-//                                        if let match:Regex.Match = try digits.wholeMatch(in: newValue)
-//                                        {
-//                                            focusedDigit += focusedDigit == nums.count - 1 ? 0 : 1
-//                                        } else
-//                                        {
-//                                            nums[index] = oldValue
-//                                        }
-//                                    } catch
-//                                    {
-//                                        
-//                                    }
-//                                }
+                                .focused($focusedDigit, equals: index)
+                                .onChange(of: nums[index])
+                                {(oldValue, newValue) in
+                                    print("old: \(oldValue)")
+                                    print("new: \(newValue)")
+                                    do
+                                    {
+                                        if let match:Regex.Match = try digits.wholeMatch(in: newValue)
+                                        {
+                                            if !newValue.isEmpty
+                                            {
+                                                nums[index] = String(newValue.last!)
+                                                focusedDigit = focusedDigit == nums.count - 1 ?
+                                                               nil : focusedDigit! + 1
+                                            } else
+                                            {
+                                                let leftMost = getLeftmostIndex()
+                                                focusedDigit! = leftMost > 0 ?
+                                                                leftMost - 1 : leftMost
+                                            }
+                                        } else
+                                        {
+                                            nums[index] = ""
+//                                            print("oh noooo")
+                                        }
+                                    } catch
+                                    {
+                                        
+                                    }
+                                }
                         }
                     }
                 }
                 Spacer()
+                Button
+                {
+                } label:
+                {
+                    Text("Verify")
+                        .font(buttonFont)
+                        .foregroundStyle(isButtonDisabled ? .textDisabled : .textOnPrimary)
+                        .padding(.vertical, 18)
+                        .frame(maxWidth: .infinity)
+                        .background
+                        {
+                            RoundedRectBackground(color: isButtonDisabled ?
+                                                         .stateDisabled : .brandPrimary,
+                                                  cornerRadius: buttonCornerRadius)
+                        }
+                        
+                }
+                .disabled(isButtonDisabled)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(20)
         }
+    }
+    
+    func getLeftmostIndex() -> Int
+    {
+        var index = nums.count - 1
+        var i = 0
+        while i < index
+        {
+            index = nums[i].isEmpty ? i : index
+            i += 1
+        }
+        return index
     }
 }
 
