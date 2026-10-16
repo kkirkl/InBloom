@@ -16,10 +16,15 @@ struct SignUpScreen: View
     @Binding var authState:AuthContext
     @State private var emailField:String = ""
     @State private var emailErrorMessage:String = ""
+    
     @State private var passwordField:String = ""
     @State private var passwordFieldShowError:Bool = false
+    @State private var hidePassword:Bool = true
+    
     @State private var confirmPasswordField:String = ""
     @State private var confirmPasswordErrorMessage:String = ""
+    @State private var hideConfirmPassword:Bool = true
+    
     var isEmailError:Bool
     {
         !emailErrorMessage.isEmpty
@@ -37,6 +42,8 @@ struct SignUpScreen: View
     let passwordMatchError:String = "Passwords must match"
     let passwordLengthError:String = "Password must be at least 6 characters long"
     let errorIcon:String = "exclamationmark.circle"
+    let showPasswordIcon:String = "eye"
+    let hidePasswordIcon:String = "eye.slash"
     let screenTitleFont:Font = .system(size: 28, weight: .bold)
     let buttonFont:Font = .system(size: 18, weight: .semibold)
     let subtitleFont:Font = .system(size: 16)
@@ -111,15 +118,26 @@ struct SignUpScreen: View
                             .padding(.leading, 6)
                         }
                     }
-                    VStack(alignment: .leading, spacing: 2)
+                    HStack
                     {
-                        Text("Password")
-                            .font(textFieldLabelFont)
-                            .foregroundStyle(.textSecondary)
-                        SecureField("password field", text: $passwordField, prompt: Text("Password"))
-                            .font(textFieldFont)
-                            .textContentType(.newPassword)
-                            .foregroundStyle(.textPrimary)
+                        VStack(alignment: .leading, spacing: 2)
+                        {
+                            Text("Password")
+                                .font(textFieldLabelFont)
+                                .foregroundStyle(.textSecondary)
+                            SecureTextField(text: $passwordField, isSecure: $hidePassword, title: "password field", prompt: Text("Password"))
+                                .font(textFieldFont)
+                                .textContentType(.newPassword)
+                                .foregroundStyle(.textPrimary)
+                        }
+                        Button
+                        {
+                            hidePassword.toggle()
+                        } label:
+                        {
+                            Image(systemName: hidePassword ? showPasswordIcon : hidePasswordIcon)
+                                .foregroundStyle(.textSecondary)
+                        }
                     }
                     .padding(textFieldPadding)
                     .background
@@ -131,16 +149,27 @@ struct SignUpScreen: View
                     }
                     VStack(alignment: .leading, spacing: errorMessageSpacing)
                     {
-                        VStack(alignment: .leading, spacing: 2)
+                        HStack
                         {
-                            Text("Confirm password")
-                                .font(textFieldLabelFont)
-                                .foregroundStyle(.textSecondary)
-                            SecureField("confirm password field", text: $confirmPasswordField,
-                                      prompt: Text("Confirm password"))
-                                .font(textFieldFont)
-                                .textContentType(.newPassword)
-                                .foregroundStyle(.textPrimary)
+                            VStack(alignment: .leading, spacing: 2)
+                            {
+                                Text("Confirm password")
+                                    .font(textFieldLabelFont)
+                                    .foregroundStyle(.textSecondary)
+                                SecureTextField(text: $confirmPasswordField, isSecure: $hideConfirmPassword, title: "confirm password field", prompt: Text("Confirm password"))
+                                    .font(textFieldFont)
+                                    .textContentType(.newPassword)
+                                    .foregroundStyle(.textPrimary)
+                                
+                            }
+                            Button
+                            {
+                                hideConfirmPassword.toggle()
+                            } label:
+                            {
+                                Image(systemName: hidePassword ? showPasswordIcon : hidePasswordIcon)
+                                    .foregroundStyle(.textSecondary)
+                            }
                         }
                         .padding(textFieldPadding)
                         .background
@@ -192,7 +221,9 @@ struct SignUpScreen: View
                         .frame(maxWidth: .infinity)
                         .background
                         {
-                            RoundedRectBackground(color: isButtonDisabled ? .stateDisabled : .brandPrimary, cornerRadius: 14)
+                            RoundedRectBackground(color: isButtonDisabled ?
+                                                         .stateDisabled : .brandPrimary,
+                                                  cornerRadius: 14)
                         }
                         
                 }
@@ -200,7 +231,7 @@ struct SignUpScreen: View
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding(20)
-            
+            .ignoresSafeArea(.keyboard)
         }
     }
     
