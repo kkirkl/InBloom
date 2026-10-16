@@ -10,9 +10,9 @@ import SwiftUI
 struct RoundedRectBackground: View
 {
     var color:Color
-    var borderColor:Color
     var cornerRadius:CGFloat
-    var borderWidth:CGFloat
+    var borderColor:Color = .clear
+    var borderWidth:CGFloat = 0
     
     
     var body: some View
@@ -35,8 +35,8 @@ struct RoundedRectBackground: View
         .background
         {
             RoundedRectBackground(color: .backgroundSurface,
-                                  borderColor: .borderDefault,
                                   cornerRadius: 12,
+                                  borderColor: .borderDefault,
                                   borderWidth: 2)
         }
 }
