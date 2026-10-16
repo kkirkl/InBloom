@@ -16,7 +16,7 @@ public struct SecureTextField: View
     }
     
     @Binding var text:String
-    @FocusState private var focusedField:Field?
+//    @FocusState private var focusedField:Field?
     
     @Binding var isSecure:Bool
     let title:LocalizedStringKey
@@ -43,10 +43,6 @@ public struct SecureTextField: View
                 textField()
             }
         }
-        .onChange(of: isSecure)
-        {(_, newValue) in
-            focusedField = isSecure ? .secure : .regular
-        }
     }
 }
 
@@ -55,7 +51,6 @@ private extension SecureTextField
     func textField() -> some View
     {
         TextField(title, text: $text, prompt: prompt)
-            .focused($focusedField, equals: .regular)
             .autocorrectionDisabled()
             .textContentType(textContentType)
             .textInputAutocapitalization(.never)
@@ -64,7 +59,6 @@ private extension SecureTextField
     func secureField() -> some View
     {
         SecureField(title, text: $text, prompt: prompt)
-            .focused($focusedField, equals: .secure)
             .textContentType(textContentType)
     }
 }
