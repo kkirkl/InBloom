@@ -20,7 +20,7 @@ struct SignUpScreen: View
     @State private var emailErrorMessage:String = ""
     
     @State private var passwordField:String = ""
-    @State private var passwordFieldShowError:Bool = false
+    @State private var isPasswordError:Bool = false
     @State private var hidePassword:Bool = true
     
     @State private var confirmPasswordField:String = ""
@@ -56,7 +56,7 @@ struct SignUpScreen: View
     let errorMessageSpacing:CGFloat = 3
     let rectCornerRadius:CGFloat = 12
     let rectBorderWidth:CGFloat = 1
-    let rectBorderErrorWidth:CGFloat = 2
+    let rectBorderHighlightWidth:CGFloat = 2
     
     enum FieldType
     {
@@ -102,8 +102,8 @@ struct SignUpScreen: View
                         {
                             RoundedRectBackground(color: .backgroundSurface,
                                 cornerRadius: rectCornerRadius,
-                                borderColor: borderColorIfError(isEmailError),
-                                borderWidth: borderWidthIfError(isEmailError))
+                                borderColor: getBorderColor(hasError: isEmailError, type: .email),
+                                borderWidth: getBorderWidth(hasError: isEmailError, type: .email))
                         }
                         .onTapGesture
                         {
@@ -149,8 +149,8 @@ struct SignUpScreen: View
                     {
                         RoundedRectBackground(color: .backgroundSurface,
                             cornerRadius: rectCornerRadius,
-                            borderColor: borderColorIfError(passwordFieldShowError),
-                            borderWidth: borderWidthIfError(passwordFieldShowError))
+                            borderColor: getBorderColor(hasError: isPasswordError, type: .password),
+                            borderWidth: getBorderWidth(hasError: isPasswordError, type: .password))
                     }
                     .onTapGesture
                     {
@@ -185,8 +185,10 @@ struct SignUpScreen: View
                         {
                             RoundedRectBackground(color: .backgroundSurface,
                                 cornerRadius: rectCornerRadius,
-                                borderColor: borderColorIfError(isConfirmPasswordError),
-                                borderWidth: borderWidthIfError(isConfirmPasswordError))
+                                borderColor: getBorderColor(hasError: isConfirmPasswordError,
+                                                            type: .confirmPassword),
+                                borderWidth: getBorderWidth(hasError: isConfirmPasswordError,
+                                                            type: .confirmPassword))
                         }
                         .onTapGesture
                         {
@@ -253,21 +255,31 @@ struct SignUpScreen: View
         }
     }
     
-    func borderColorIfError(_ hasError:Bool) -> Color
+    func getBorderColor(hasError:Bool, type:FieldType) -> Color
     {
-        return hasError ? .stateError : .borderDefault
+        if hasError
+        {
+            return .stateError
+        }
+        
+        return currentFocus == type ? .brandPrimary : .borderDefault
     }
     
-    func borderWidthIfError(_ hasError:Bool) -> CGFloat
+    func getBorderWidth(hasError:Bool, type:FieldType) -> CGFloat
     {
-        hasError ? rectBorderErrorWidth : rectBorderWidth
+        if hasError
+        {
+            return rectBorderHighlightWidth
+        }
+        
+        return currentFocus == type ? rectBorderHighlightWidth : rectBorderWidth
     }
     
     func handleContinue()
     {
         currentFocus = nil
         emailErrorMessage = ""
-        passwordFieldShowError = false
+        isPasswordError = false
         confirmPasswordErrorMessage = ""
         do
         {
@@ -286,7 +298,7 @@ struct SignUpScreen: View
             confirmPasswordErrorMessage = passwordMatchError
         } else if passwordField.count < firestoreMinPasswordLength
         {
-            passwordFieldShowError = true
+            isPasswordError = true
             confirmPasswordErrorMessage = passwordLengthError
         }
     }
