@@ -98,7 +98,7 @@ struct ConfirmEmail: View
                                         } else
                                         {
                                             nums[index] = ""
-//                                            print("oh noooo")
+
                                         }
                                     } catch
                                     {
