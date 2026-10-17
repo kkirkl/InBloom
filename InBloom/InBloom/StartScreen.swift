@@ -164,9 +164,11 @@ struct StartScreen: View
                         case .signup:
                             SignUpScreen(navVM: navVM, authState: $authState)
                         case let .confirmEmail(email):
-                            ConfirmEmail(navVM: navVM, email: email)
+                            ConfirmEmail(authState: $authState, navVM: navVM, email: email)
                         case .emailConfirmed:
-                            EmailConfirmed(navVM: navVM)
+                            EmailConfirmed(authState: $authState, navVM: navVM)
+                        case .createProfile:
+                            CreateProfileScreen(authState: $authState)
                         default:
                             self
                     }

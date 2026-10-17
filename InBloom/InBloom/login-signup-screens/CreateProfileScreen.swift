@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CreateProfileScreen: View
 {
+    @Binding var authState:AuthContext
     @State private var firstName:String = ""
     @State private var lastName:String = ""
     @State private var username:String = ""
@@ -31,5 +32,6 @@ struct CreateProfileScreen: View
 
 #Preview
 {
-    CreateProfileScreen()
+    @Previewable @State var test:AuthContext = .unauthenticated
+    CreateProfileScreen(authState: $test)
 }

@@ -167,7 +167,7 @@ struct SignUpScreen: View
                                     .foregroundStyle(.textSecondary)
                                 SecureTextField(text: $confirmPasswordField, isSecure: $hideConfirmPassword, title: "confirm password field", prompt: Text("Confirm password"))
                                     .font(textFieldFont)
-                                    .textContentType(.newPassword)
+//                                    .textContentType(.newPassword)
                                     .foregroundStyle(.textPrimary)
                                     .focused($currentFocus, equals: .confirmPassword)
                             }

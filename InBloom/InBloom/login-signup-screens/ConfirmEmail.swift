@@ -11,6 +11,7 @@ let verificationCodeLength:Int = 6
 
 struct ConfirmEmail: View
 {
+    @Binding var authState:AuthContext
     @ObservedObject var navVM:NavigationViewModel
     @State private var nums:[String] = Array(repeating: "", count: verificationCodeLength)
     @FocusState private var focusedDigit:Int?
@@ -150,6 +151,7 @@ struct ConfirmEmail: View
 
 #Preview
 {
+    @Previewable @State var test:AuthContext = .unauthenticated
     @Previewable @StateObject var navVM:NavigationViewModel = NavigationViewModel()
-    ConfirmEmail(navVM: navVM, email: "example@test.temp")
+    ConfirmEmail(authState: $test, navVM: navVM, email: "example@test.temp")
 }

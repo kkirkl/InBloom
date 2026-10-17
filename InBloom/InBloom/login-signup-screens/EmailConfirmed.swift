@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EmailConfirmed: View
 {
+    @Binding var authState:AuthContext
     @ObservedObject var navVM:NavigationViewModel
     let screenTitleFont:Font = .system(size: 28, weight: .bold)
     let subtitleFont:Font = .system(size: 16)
@@ -65,6 +66,7 @@ struct EmailConfirmed: View
 
 #Preview
 {
+    @Previewable @State var test:AuthContext = .unauthenticated
     @Previewable @StateObject var navVM:NavigationViewModel = NavigationViewModel()
-    EmailConfirmed(navVM: navVM)
+    EmailConfirmed(authState: $test, navVM: navVM)
 }
