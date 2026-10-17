@@ -168,7 +168,7 @@ struct StartScreen: View
                         case .emailConfirmed:
                             EmailConfirmed(authState: $authState, navVM: navVM)
                         case .createProfile:
-                            CreateProfileScreen(authState: $authState)
+                            CreateProfileScreen(authState: $authState, navVM: navVM)
                         default:
                             self
                     }

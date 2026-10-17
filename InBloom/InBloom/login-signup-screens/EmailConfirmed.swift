@@ -43,6 +43,7 @@ struct EmailConfirmed: View
                 Spacer()
                 Button
                 {
+                    navVM.pushScreen(screen: .createProfile)
                 } label:
                 {
                     Text("Continue")

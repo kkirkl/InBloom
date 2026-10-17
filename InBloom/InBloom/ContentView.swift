@@ -26,6 +26,7 @@ struct ContentView: View
                 
             case .authenticated:
                 MainView()
+                    .transition(.push(from: .bottom))
         }
     }
 }
