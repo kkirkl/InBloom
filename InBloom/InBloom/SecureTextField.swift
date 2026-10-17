@@ -21,7 +21,7 @@ public struct SecureTextField: View
     @Binding var isSecure:Bool
     let title:LocalizedStringKey
     let prompt:Text
-    var textContentType:UITextContentType = .password
+//    var textContentType:UITextContentType = .password
     
     public init(_ title:LocalizedStringKey, text:Binding<String>, prompt:Text, isSecure:Binding<Bool>)
     {
@@ -52,14 +52,14 @@ private extension SecureTextField
     {
         TextField(title, text: $text, prompt: prompt)
             .autocorrectionDisabled()
-            .textContentType(textContentType)
+//            .textContentType(textContentType)
             .textInputAutocapitalization(.never)
     }
     
     func secureField() -> some View
     {
         SecureField(title, text: $text, prompt: prompt)
-            .textContentType(textContentType)
+//            .textContentType(textContentType)
     }
 }
 
@@ -68,7 +68,7 @@ public extension SecureTextField
     func setTextContentType( _ textContentType:UITextContentType) -> some View
     {
         var view = self
-        view.textContentType = textContentType
+//        view.textContentType = textContentType
         return view
     }
 }

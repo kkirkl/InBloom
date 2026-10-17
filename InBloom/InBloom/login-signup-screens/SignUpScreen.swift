@@ -129,7 +129,10 @@ struct SignUpScreen: View
                             Text("Password")
                                 .font(textFieldLabelFont)
                                 .foregroundStyle(.textSecondary)
-                            SecureTextField(text: $passwordField, isSecure: $hidePassword, title: "password field", prompt: Text("Password"))
+                            SecureTextField("password field",
+                                            text: $passwordField,
+                                            prompt: Text("Password"),
+                                            isSecure: $hidePassword)
                                 .font(textFieldFont)
                                 .textContentType(.newPassword)
                                 .foregroundStyle(.textPrimary)
@@ -165,9 +168,12 @@ struct SignUpScreen: View
                                 Text("Confirm password")
                                     .font(textFieldLabelFont)
                                     .foregroundStyle(.textSecondary)
-                                SecureTextField(text: $confirmPasswordField, isSecure: $hideConfirmPassword, title: "confirm password field", prompt: Text("Confirm password"))
+                                SecureTextField("confirm password field",
+                                                text: $confirmPasswordField,
+                                                prompt: Text("Confirm password"),
+                                                isSecure: $hideConfirmPassword)
                                     .font(textFieldFont)
-//                                    .textContentType(.newPassword)
+                                    .textContentType(.newPassword)
                                     .foregroundStyle(.textPrimary)
                                     .focused($currentFocus, equals: .confirmPassword)
                             }
