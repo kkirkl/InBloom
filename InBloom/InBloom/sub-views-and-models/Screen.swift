@@ -12,5 +12,6 @@ enum Screen: Hashable
     case confirmEmail(email:String)
     case emailConfirmed
     case createProfile
+    case confirmJobDetails
     case jobDetail(job:Job)
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ConfirmJobDetailsScreen: View
 {
+    @ObservedObject var navVM:NavigationViewModel
     @State private var company:String = ""
     // parallel arrays
     @State private var fields:[String] = ["", "", "", ""]
@@ -59,5 +60,5 @@ struct ConfirmJobDetailsScreen: View
 
 #Preview
 {
-    ConfirmJobDetailsScreen()
+    ConfirmJobDetailsScreen(navVM: NavigationViewModel())
 }
