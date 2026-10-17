@@ -23,13 +23,13 @@ public struct SecureTextField: View
     let prompt:Text
     var textContentType:UITextContentType = .password
     
-//    public init(_ title:LocalizedStringKey, text:Binding<String>, prompt:Text, isSecure:Binding<Bool>)
-//    {
-//        self.title = title
-//        _text = text
-//        self.prompt = prompt
-//        isSecureTextEntry = isSecure
-//    }
+    public init(_ title:LocalizedStringKey, text:Binding<String>, prompt:Text, isSecure:Binding<Bool>)
+    {
+        self.title = title
+        _text = text
+        self.prompt = prompt
+        _isSecure = isSecure
+    }
     
     public var body: some View
     {
