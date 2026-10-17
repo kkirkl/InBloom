@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DefaultContainer<Content:View>: View
+struct DefaultVStack<Content:View>: View
 {
     var alignment:HorizontalAlignment
     var spacing:CGFloat?
@@ -34,7 +34,7 @@ struct DefaultContainer<Content:View>: View
 
 #Preview
 {
-    DefaultContainer
+    DefaultVStack
     {
         Text("wowie?")
         Text("zowie?")
