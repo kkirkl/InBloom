@@ -301,6 +301,10 @@ struct SignUpScreen: View
             isPasswordError = true
             confirmPasswordErrorMessage = passwordLengthError
         }
+        if !isEmailError && !isPasswordError && !isConfirmPasswordError
+        {
+            navVM.pushScreen(screen: .confirmEmail(email: emailField))
+        }
     }
 }
 

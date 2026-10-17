@@ -12,7 +12,7 @@ import Combine
 
 class NavigationViewModel: ObservableObject
 {
-    @Published var path = NavigationPath()
+    @Published var path:NavigationPath = NavigationPath()
     
     func pushScreen(screen:Screen)
     {

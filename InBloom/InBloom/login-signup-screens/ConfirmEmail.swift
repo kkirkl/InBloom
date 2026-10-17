@@ -11,6 +11,7 @@ let verificationCodeLength:Int = 6
 
 struct ConfirmEmail: View
 {
+    @ObservedObject var navVM:NavigationViewModel
     @State private var nums:[String] = Array(repeating: "", count: verificationCodeLength)
     @FocusState private var focusedDigit:Int?
     
@@ -111,6 +112,7 @@ struct ConfirmEmail: View
                 Spacer()
                 Button
                 {
+                    navVM.pushScreen(screen: .emailConfirmed)
                 } label:
                 {
                     Text("Verify")
@@ -148,5 +150,6 @@ struct ConfirmEmail: View
 
 #Preview
 {
-    ConfirmEmail(email: "example@test.temp")
+    @Previewable @StateObject var navVM:NavigationViewModel = NavigationViewModel()
+    ConfirmEmail(navVM: navVM, email: "example@test.temp")
 }

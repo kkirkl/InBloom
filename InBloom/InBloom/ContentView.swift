@@ -13,13 +13,6 @@ enum AuthContext
     case authenticated
 }
 
-enum Screen: Hashable
-{
-    case login
-    case signup
-    case jobDetail(job:Job)
-}
-
 struct ContentView: View
 {
     @State private var authenticationStatus:AuthContext = .unauthenticated
