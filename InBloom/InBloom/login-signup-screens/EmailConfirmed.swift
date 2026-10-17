@@ -56,7 +56,6 @@ struct EmailConfirmed: View
                             RoundedRectBackground(color: .brandPrimary,
                                                   cornerRadius: buttonCornerRadius)
                         }
-                        
                 }
             }
             .navigationBarBackButtonHidden()
