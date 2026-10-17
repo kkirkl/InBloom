@@ -14,6 +14,8 @@ struct GardenScreen: View
     {
         ZStack
         {
+            Color(.backgroundDefault)
+                .ignoresSafeArea()
             VStack
             {
                 Spacer()
