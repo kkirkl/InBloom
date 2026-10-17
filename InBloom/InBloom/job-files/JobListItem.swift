@@ -64,5 +64,5 @@ struct JobListItem: View
 
 #Preview
 {
-    JobListItem(navVM: NavigationViewModel(), job: Job(title: "Job Title", items: [], itemCompletion: [], isSaved: false, deadline: Date(timeIntervalSince1970: 10000000), link: "http://idklol.com"))
+//    JobListItem(navVM: NavigationViewModel(), job: Job(title: "Job Title", items: [], itemCompletion: [], isSaved: false, deadline: Date(timeIntervalSince1970: 10000000), link: "http://idklol.com"))
 }

@@ -83,5 +83,5 @@ struct JobDetailScreen: View
 
 #Preview
 {
-    JobDetailScreen(job: Job(title: "Job Title", items: ["example", "example 2"], itemCompletion: [], isSaved: false, deadline: Date(timeIntervalSince1970: 1795000000), link: "http://idklol.com"))
+//    JobDetailScreen(job: Job(title: "Job Title", items: ["example", "example 2"], itemCompletion: [], isSaved: false, deadline: Date(timeIntervalSince1970: 1795000000), link: "http://idklol.com"))
 }

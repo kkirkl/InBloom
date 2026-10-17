@@ -9,6 +9,7 @@ import Foundation
 
 struct Job: Hashable
 {
+    var company:String
     var title:String
     var items:[String] // TODO maybe have default items
     var itemCompletion:[Bool]
@@ -23,7 +24,7 @@ struct Job: Hashable
         newItems.append(newItem)
         newCompletions.append(false)
         
-        return Job(title: title, items: newItems, itemCompletion: newCompletions,
+        return Job(company: company, title: title, items: newItems, itemCompletion: newCompletions,
                    isSaved: isSaved, deadline: deadline, link: link)
     }
     
@@ -31,7 +32,7 @@ struct Job: Hashable
     {
         var newCompletions:[Bool] = itemCompletion
         newCompletions[itemIndex].toggle()
-        return Job(title: title, items: items, itemCompletion: newCompletions,
+        return Job(company: company, title: title, items: items, itemCompletion: newCompletions,
                    isSaved: isSaved, deadline: deadline, link: link)
     }
     
@@ -47,7 +48,7 @@ struct Job: Hashable
     
     func toggledSaved() -> Job
     {
-        return Job(title: title, items: items, itemCompletion: itemCompletion,
+        return Job(company: company, title: title, items: items, itemCompletion: itemCompletion,
                    isSaved: !isSaved, deadline: deadline, link: link)
     }
     
