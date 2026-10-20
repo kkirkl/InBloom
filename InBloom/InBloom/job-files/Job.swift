@@ -11,11 +11,11 @@ struct Job: Hashable
 {
     var company:String
     var title:String
-    var items:[String] // TODO maybe have default items
-    var itemCompletion:[Bool]
-    var isSaved:Bool
-    var deadline:Date
-    var link:String
+    var items:[String] = [] // TODO maybe have default items
+    var itemCompletion:[Bool] = []
+    var isSaved:Bool = false
+    var deadline:Date?
+    var link:String?
     
     func addItem(newItem:String) -> Job
     {
@@ -28,8 +28,11 @@ struct Job: Hashable
                    isSaved: isSaved, deadline: deadline, link: link)
     }
     
-    func toggleItem(itemIndex:Int) -> Job
+    func toggleItem(itemIndex:Int) -> Job?
     {
+        guard itemIndex < items.count else {return nil}
+        
+        // should always be parallel with items, so it's safe to unwrap
         var newCompletions:[Bool] = itemCompletion
         newCompletions[itemIndex].toggle()
         return Job(company: company, title: title, items: items, itemCompletion: newCompletions,
