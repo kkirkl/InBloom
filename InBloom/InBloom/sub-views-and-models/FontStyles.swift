@@ -36,6 +36,11 @@ extension Font
     {
         .system(size: 16)
     }
+    
+    static var section:Font
+    {
+        .system(size: 18, weight: .semibold)
+    }
 }
 
 extension Text
@@ -53,6 +58,11 @@ extension Text
     func caption() -> some View
     {
         self.font(.caption).foregroundStyle(.textSecondary)
+    }
+    
+    func section() -> some View
+    {
+        self.font(.section).foregroundStyle(.textPrimary)
     }
 }
 
