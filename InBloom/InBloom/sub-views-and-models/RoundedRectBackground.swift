@@ -13,6 +13,7 @@ struct RoundedRectBackground: View
     var cornerRadius:CGFloat
     var borderColor:Color = .clear
     var borderWidth:CGFloat = 0
+    var dash:[CGFloat] = []
     
     
     var body: some View
@@ -22,7 +23,7 @@ struct RoundedRectBackground: View
             .overlay
             {
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .strokeBorder(lineWidth: borderWidth)
+                    .strokeBorder(style: StrokeStyle(lineWidth: borderWidth, dash: dash))
                     .foregroundStyle(borderColor)
             }
     }
@@ -37,6 +38,7 @@ struct RoundedRectBackground: View
             RoundedRectBackground(color: .backgroundSurface,
                                   cornerRadius: 12,
                                   borderColor: .borderDefault,
-                                  borderWidth: 2)
+                                  borderWidth: 2,
+                                  dash: [5])
         }
 }
