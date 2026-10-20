@@ -12,15 +12,51 @@ let tagNumFont:Font = .system(size: 24 * 0.6)
 
 struct JobTracker: View
 {
+    enum Filter: CaseIterable, Hashable
+    {
+        case saved
+        case inProgress
+        case done
+        
+        var description:String
+        {
+            switch self
+            {
+                case .saved:
+                    "Saved"
+                case .inProgress:
+                    "In progress"
+                case .done:
+                    "Done"
+            }
+        }
+        
+        var filterFunction: (Job) -> Bool
+        {
+            switch self
+            {
+                case .saved:
+                    {job in job.isSaved}
+                case .inProgress:
+                    {job in !job.isCompleted}
+                case .done:
+                    {job in job.isCompleted}
+            }
+        }
+    }
+    
     let buttonInternalPadding:CGFloat = 18
     let buttonCornerRadius:CGFloat = 16
+    let filterHorizontalInternalPadding:CGFloat = 14
+    let filterVerticalInternalPadding:CGFloat = 8
+    let filterCornerRadius:CGFloat = 100
+    let filterBorderWidth:CGFloat = 1
     
     @ObservedObject var navVM:NavigationViewModel
     @State private var showAddSheet:Bool = false // should be false when not testing
     @State private var jobs:[Job] = []
     @State private var jobPasteField:String = ""
-
-    let filters:[String] = ["All", "Saved", "In progress", "Done"]
+    @State private var currentFilter:Filter?
     
     var body: some View
     {
@@ -34,10 +70,62 @@ struct JobTracker: View
                 {
                     Text("Job tracker")
                         .screenTitle()
-                    Text("0 jobs tracked")
+                    Text("\(jobs.count) jobs tracked")
                         .caption()
+                    HStack(spacing: 4)
+                    {
+                        Button
+                        {
+                            currentFilter = nil
+                        } label:
+                        {
+                            Text("All \(jobs.count)")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(currentFilter == nil ? .textOnPrimary : .textPrimary)
+                                .padding(.vertical, filterVerticalInternalPadding)
+                                .padding(.horizontal, filterHorizontalInternalPadding)
+                                .background
+                                {
+                                    RoundedRectBackground(
+                                        color: currentFilter == nil ?
+                                               .brandPrimary : .backgroundSurface,
+                                        cornerRadius: filterCornerRadius,
+                                        borderColor: currentFilter == nil ?
+                                                     .brandPrimary : .borderDefault,
+                                        borderWidth: filterBorderWidth)
+                                }
+                        }
+                        ForEach(Filter.allCases, id: \.self)
+                        {(filter) in
+                            Button
+                            {
+                                currentFilter = filter
+                            } label:
+                            {
+                                Text("\(filter.description) \(filteredJobs(filter).count)")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(currentFilter == filter ?
+                                                     .textOnPrimary : .textPrimary)
+                                    .padding(.vertical, filterVerticalInternalPadding)
+                                    .padding(.horizontal, filterHorizontalInternalPadding)
+                                    .background
+                                    {
+                                        RoundedRectBackground(
+                                            color: currentFilter == filter ?
+                                                   .brandPrimary : .backgroundSurface,
+                                            cornerRadius: filterCornerRadius,
+                                            borderColor: currentFilter == filter ?
+                                                         .brandPrimary : .borderDefault,
+                                            borderWidth: filterBorderWidth)
+                                    }
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
                 }
-                .padding(.leading, 20)
+                .padding(.horizontal, 20)
                 .padding(.top, 20)
                 .padding(.bottom, 80)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -153,6 +241,19 @@ struct JobTracker: View
                 Color(.backgroundDefault)
             }
         }
+    }
+    
+    func filteredJobs(_ filter:Filter) -> [Job]
+    {
+        var savedJobs:[Job] = []
+        for job in jobs
+        {
+            if filter.filterFunction(job)
+            {
+                savedJobs.append(job)
+            }
+        }
+        return savedJobs
     }
     
     func temp()
