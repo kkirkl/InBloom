@@ -23,4 +23,9 @@ class NavigationViewModel: ObservableObject
     {
         path.append(Screen.jobDetail(job: job))
     }
+    
+    func popScreen()
+    {
+        path.removeLast()
+    }
 }
