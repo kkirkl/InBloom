@@ -66,110 +66,89 @@ struct JobTracker: View
     
     var body: some View
     {
-        ZStack
+        DefaultVStack
         {
-            Color(.backgroundDefault)
-                .ignoresSafeArea()
-            VStack
+            VStack(alignment: .leading, spacing: 10)
             {
-                VStack(alignment: .leading, spacing: 10)
+                Text("Job tracker")
+                    .screenTitle()
+                Text("\(jobs.count) jobs tracked")
+                    .caption()
+                HStack(spacing: 4)
                 {
-                    Text("Job tracker")
-                        .screenTitle()
-                    Text("\(jobs.count) jobs tracked")
-                        .caption()
-                    HStack(spacing: 4)
+                    Button
                     {
+                        currentFilter = nil
+                    } label:
+                    {
+                        Text("All \(jobs.count)")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(currentFilter == nil ? .textOnPrimary : .textPrimary)
+                            .padding(.vertical, filterVerticalInternalPadding)
+                            .padding(.horizontal, filterHorizontalInternalPadding)
+                            .background
+                            {
+                                RoundedRectBackground(
+                                    color: currentFilter == nil ?
+                                           .brandPrimary : .backgroundSurface,
+                                    cornerRadius: filterCornerRadius,
+                                    borderColor: currentFilter == nil ?
+                                                 .brandPrimary : .borderDefault,
+                                    borderWidth: filterBorderWidth)
+                            }
+                    }
+                    ForEach(Filter.allCases, id: \.self)
+                    {(filter) in
                         Button
                         {
-                            currentFilter = nil
+                            currentFilter = filter
                         } label:
                         {
-                            Text("All \(jobs.count)")
+                            Text("\(filter.description) \(filteredJobs(filter).count)")
                                 .font(.caption)
                                 .fontWeight(.semibold)
-                                .foregroundStyle(currentFilter == nil ? .textOnPrimary : .textPrimary)
+                                .foregroundStyle(currentFilter == filter ?
+                                                 .textOnPrimary : .textPrimary)
                                 .padding(.vertical, filterVerticalInternalPadding)
                                 .padding(.horizontal, filterHorizontalInternalPadding)
                                 .background
                                 {
                                     RoundedRectBackground(
-                                        color: currentFilter == nil ?
+                                        color: currentFilter == filter ?
                                                .brandPrimary : .backgroundSurface,
                                         cornerRadius: filterCornerRadius,
-                                        borderColor: currentFilter == nil ?
+                                        borderColor: currentFilter == filter ?
                                                      .brandPrimary : .borderDefault,
                                         borderWidth: filterBorderWidth)
                                 }
                         }
-                        ForEach(Filter.allCases, id: \.self)
-                        {(filter) in
-                            Button
-                            {
-                                currentFilter = filter
-                            } label:
-                            {
-                                Text("\(filter.description) \(filteredJobs(filter).count)")
-                                    .font(.caption)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(currentFilter == filter ?
-                                                     .textOnPrimary : .textPrimary)
-                                    .padding(.vertical, filterVerticalInternalPadding)
-                                    .padding(.horizontal, filterHorizontalInternalPadding)
-                                    .background
-                                    {
-                                        RoundedRectBackground(
-                                            color: currentFilter == filter ?
-                                                   .brandPrimary : .backgroundSurface,
-                                            cornerRadius: filterCornerRadius,
-                                            borderColor: currentFilter == filter ?
-                                                         .brandPrimary : .borderDefault,
-                                            borderWidth: filterBorderWidth)
-                                    }
-                            }
-                        }
                     }
-                    .frame(maxWidth: .infinity)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
-                .padding(.bottom, 80)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                if(jobs.isEmpty)
-                {
-                    VStack(spacing: 10)
-                    {
-                        Text("No jobs yet")
-                            .section()
-                        Text("Tap \"+ Add a job\" to start tracking an application.")
-                            .body()
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(width: 300)
-                    Spacer()
-                }
-                Button
-                {
-                    showAddSheet = true
-                } label:
-                {
-                    Text("+ Add a job")
-                        .font(.button)
-                        .foregroundStyle(.brandPrimary)
-                        .padding(.vertical, buttonInternalPadding)
-                        .frame(maxWidth: .infinity)
-                        .background
-                        {
-                            RoundedRectBackground(color: .clear,
-                                                  cornerRadius: buttonCornerRadius,
-                                                  borderColor: .brandPrimary,
-                                                  borderWidth: 2,
-                                                  dash: [6, 4])
-                        }
-                }
-                .padding(.bottom, 40)
-                .padding(.horizontal, 20)
+                .frame(maxWidth: .infinity)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            JobList(jobs: $jobs)
+            Button
+            {
+                showAddSheet = true
+            } label:
+            {
+                Text("+ Add a job")
+                    .font(.button)
+                    .foregroundStyle(.brandPrimary)
+                    .padding(.vertical, buttonInternalPadding)
+                    .frame(maxWidth: .infinity)
+                    .background
+                    {
+                        RoundedRectBackground(color: .clear,
+                                              cornerRadius: buttonCornerRadius,
+                                              borderColor: .brandPrimary,
+                                              borderWidth: 2,
+                                              dash: [6, 4])
+                    }
+            }
+            .padding(.bottom, 40)
         }
         .sheet(isPresented: $showAddSheet)
         {
