@@ -9,60 +9,80 @@ import SwiftUI
 
 struct JobListItem: View
 {
-    @ObservedObject var navVM:NavigationViewModel
-    @State var job:Job
+    @Binding var job:Job
     
     var body: some View
     {
-        HStack
+        Button
         {
-            Text("[plant here]")
-                .padding()
-            VStack(alignment: .leading)
+            
+        } label:
+        {
+            HStack
             {
-                Text(job.title)
-                    .font(.title)
-                HStack
-                {
-                    if job.isSaved
+                Image(systemName: "suitcase")
+                    .font(.section)
+                    .foregroundStyle(.textSecondary)
+                    .padding(8)
+                    .background
                     {
-                        Button("\(Image(systemName: "bookmark.fill"))")
-                        {
-                            job = job.toggledSaved()
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.green)
-                    } else
-                    {
-                        Button("\(Image(systemName: "bookmark"))")
-                        {
-                            job = job.toggledSaved()
-                        }
-                        .buttonStyle(.bordered)
-                        .foregroundStyle(Color(white: 0.5))
-                        .tint(.none)
+                        RoundedRectBackground(color: .backgroundMuted, cornerRadius: 12)
                     }
-                    Spacer()
-                    Text("step \(job.completedItems()) of \(job.items.count)")
+                VStack(alignment: .leading, spacing: 4)
+                {
+                    Text(job.title)
+                        .font(.body)
+                        .foregroundStyle(.textPrimary)
+                        .fontWeight(.semibold)
+                    Text(job.company)
+                        .caption()
+                        .padding(.bottom, 1)
+                    HStack
+                    {
+                        Button
+                        {
+                            job.isSaved.toggle()
+                        } label:
+                        {
+                            Text("Saved")
+                                .font(.caption)
+                                .foregroundStyle(job.isSaved ? .textOnPrimary : .textSecondary)
+                                .fontWeight(.semibold)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                        }
+                        .background
+                        {
+                            RoundedRectBackground(color: job.isSaved ?
+                                                  .brandPrimary : .backgroundMuted,
+                                                  cornerRadius: 100)
+                        }
+                        Text("\(job.completedItems()) of \(job.items.count) steps")
+                            .caption()
+                    }
+                    
                 }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.textSecondary)
+                    .font(.caption)
+                    .fontWeight(.semibold)
             }
-            .padding(.vertical, 8)
-            Image(systemName: "chevron.right")
-                .font(.system(size: 20))
-                .foregroundStyle(.gray)
-                .padding(.trailing, 15)
-                .padding(.leading, 50)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .border(.gray, width: 2.5)
-        .onTapGesture
-        {
-            navVM.pushJobDetail(job: job)
+            .frame(maxWidth: .infinity)
+            .padding(16)
+            .background
+            {
+                RoundedRectBackground(color: .backgroundSurface, cornerRadius: 16, borderColor: .borderDefault, borderWidth: 1)
+            }
         }
     }
 }
 
 #Preview
 {
-//    JobListItem(navVM: NavigationViewModel(), job: Job(title: "Job Title", items: [], itemCompletion: [], isSaved: false, deadline: Date(timeIntervalSince1970: 10000000), link: "http://idklol.com"))
+    @Previewable @State var example:Job = Job(company: "Roblox", title: "Product Designer")
+    DefaultVStack
+    {
+        JobListItem(job: $example)
+    }
 }
