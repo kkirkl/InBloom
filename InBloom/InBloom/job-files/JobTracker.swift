@@ -12,11 +12,15 @@ let tagNumFont:Font = .system(size: 24 * 0.6)
 
 struct JobTracker: View
 {
+    let buttonInternalPadding:CGFloat = 18
+    let buttonCornerRadius:CGFloat = 16
+    
     @ObservedObject var navVM:NavigationViewModel
     @State private var showAddSheet:Bool = false // should be false when not testing
     @State private var jobs:[Job] = []
     @State private var jobPasteField:String = ""
-//    let exampleJobs:[Job] = [Job(title: "Job Title 1", items: ["first task", "second task"], itemCompletion: [true, false], isSaved: false, deadline: Date(timeIntervalSince1970: 1795000000), link: ""), Job(title: "Job Title 2", items: ["wake up", "grab a brush"], itemCompletion: [false, false], isSaved: true, deadline: Date(timeIntervalSince1970: 1795000000), link: "")]
+
+    let filters:[String] = ["All", "Saved", "In progress", "Done"]
     
     var body: some View
     {
@@ -29,10 +33,9 @@ struct JobTracker: View
                 VStack(alignment: .leading, spacing: 10)
                 {
                     Text("Job tracker")
-                        .font(.system(size: 40, weight: .bold))
-                        .foregroundStyle(.textPrimary)
+                        .screenTitle()
                     Text("0 jobs tracked")
-                        .foregroundStyle(.textSecondary)
+                        .caption()
                 }
                 .padding(.leading, 20)
                 .padding(.top, 20)
@@ -43,10 +46,9 @@ struct JobTracker: View
                     VStack(spacing: 10)
                     {
                         Text("No jobs yet")
-                            .foregroundStyle(.textPrimary)
-                            .font(.system(size: 20, weight: .semibold))
+                            .section()
                         Text("Tap \"+ Add a job\" to start tracking an application.")
-                            .foregroundStyle(.textSecondary)
+                            .body()
                             .multilineTextAlignment(.center)
                     }
                     .frame(width: 300)
@@ -54,18 +56,25 @@ struct JobTracker: View
                 }
                 Button
                 {
-                    showAddSheet = true
+                    
                 } label:
                 {
                     Text("+ Add a job")
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(.textOnPrimary)
-                        .frame(width: 356, height: 46)
+                        .font(.button)
+                        .foregroundStyle(.brandPrimary)
+                        .padding(.vertical, buttonInternalPadding)
+                        .frame(maxWidth: .infinity)
+                        .background
+                        {
+                            RoundedRectBackground(color: .clear,
+                                                  cornerRadius: buttonCornerRadius,
+                                                  borderColor: .brandPrimary,
+                                                  borderWidth: 2,
+                                                  dash: [6, 4])
+                        }
                 }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.roundedRectangle(radius: 18))
-                .tint(.brandPrimary)
                 .padding(.bottom, 40)
+                .padding(.horizontal, 20)
             }
         }
         .sheet(isPresented: $showAddSheet)
