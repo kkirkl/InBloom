@@ -9,6 +9,69 @@ import SwiftUI
 
 struct AddJobScreen: View
 {
+    enum Field:Int, CaseIterable, Hashable
+    {
+        case company = 0
+        case jobTitle = 1
+        case location = 2
+        case link = 3
+        case applicationDate = 4
+        case deadline = 5
+        
+        var label:String
+        {
+            switch self
+            {
+                case .company:
+                    "Company"
+                case .jobTitle:
+                    "Job title"
+                case .location:
+                    "Location"
+                case .link:
+                    "Link"
+                case .applicationDate:
+                    "Application date"
+                case .deadline:
+                    "deadline"
+                    
+            }
+        }
+        
+        var prompt:String
+        {
+            switch self
+            {
+                case .company:
+                    "Company name"
+                case .jobTitle:
+                    "Job title"
+                case .location:
+                    "City or remote"
+                case .link:
+                    "Pase job link"
+                case .applicationDate:
+                    "Select date"
+                case .deadline:
+                    "Select date"
+                    
+            }
+        }
+        
+        var isRequired:Bool
+        {
+            switch self
+            {
+                case .company:
+                    true
+                case .jobTitle:
+                    true
+                default:
+                    false
+            }
+        }
+    }
+    
     // constants
     let companyFieldIndex:Int = 0
     let titleFieldIndex:Int = 1
@@ -18,25 +81,21 @@ struct AddJobScreen: View
     let buttonInternalPadding:CGFloat = 18
     let fieldSpacing:CGFloat = 12
     
+    @ObservedObject var navVM:NavigationViewModel
+    @Binding var jobs:[Job]
     @FocusState private var focusedField:Int?
     @State private var fieldValues:[String]
-    var requiredFields:[Bool]
-    let fieldLabels:[String] = ["Company", "Job title", "Location", "Link", "Application date",
-                                "Deadline"]
-    let fieldPrompts:[String] = ["Company name", "Job title", "City or remote", "Paste job link",
-                                 "Select date", "Select date"]
     
     var isButtonEnabled:Bool
     {
         !fieldValues[companyFieldIndex].isEmpty && !fieldValues[titleFieldIndex].isEmpty
     }
     
-    init()
+    init(_ navVM:NavigationViewModel, jobs:Binding<[Job]>)
     {
-        self.fieldValues = Array(repeating: "", count: fieldLabels.count)
-        self.requiredFields = Array(repeating: false, count: fieldLabels.count)
-        self.requiredFields[companyFieldIndex] = true // company
-        self.requiredFields[titleFieldIndex] = true // job title
+        self.navVM = navVM
+        self._jobs = jobs
+        self.fieldValues = Array(repeating: "", count: Field.allCases.count)
     }
     
     var body: some View
@@ -53,26 +112,27 @@ struct AddJobScreen: View
             .frame(maxWidth: .infinity, alignment: .leading)
             VStack(spacing: fieldSpacing)
             {
-                ForEach(fieldLabels.indices, id: \.self)
-                {(index) in
+                ForEach(Field.allCases, id: \.self)
+                {(field) in
                     VStack(alignment: .leading, spacing: 0)
                     {
                         // "[field label] ["*" if required]"
-                        Text("\(fieldLabels[index]) \(requiredFields[index] ? "*" : "")")
+                        Text("\(field.label) \(field.isRequired ? "*" : "")")
                             .caption()
-                        TextField("\(fieldLabels[index]) field",
-                                  text: $fieldValues[index],
-                                  prompt: Text(fieldPrompts[index]))
-                            .focused($focusedField, equals: index)
+                        TextField("\(field.label) field",
+                                  text: $fieldValues[field.rawValue],
+                                  prompt: Text(field.prompt))
+                            .focused($focusedField, equals: field.rawValue)
                     }
                     .padding(16)
                     .background
                     {
                         RoundedRectBackground(
                             color: .backgroundSurface,
-                            cornerRadius: index == focusedField ?
+                            cornerRadius: field.rawValue == focusedField ?
                                           (rectCornerRadius + 1) : rectCornerRadius,
-                            borderColor: index == focusedField ? .brandPrimary : .borderDefault,
+                            borderColor: field.rawValue == focusedField ?
+                                         .brandPrimary : .borderDefault,
                             borderWidth: rectBorderWidth)
                     }
                 }
@@ -80,7 +140,8 @@ struct AddJobScreen: View
             Spacer()
             Button
             {
-                
+                jobs.append(Job(company: fieldValues[Field.company.rawValue], title: fieldValues[Field.jobTitle.rawValue]))
+                navVM.popScreen()
             } label:
             {
                 Text("Save job")
@@ -93,11 +154,13 @@ struct AddJobScreen: View
                         RoundedRectBackground(color: isButtonEnabled ? .brandPrimary : .stateDisabled, cornerRadius: buttonCornerRadius)
                     }
             }
+            .disabled(!isButtonEnabled)
         }
     }
 }
 
 #Preview
 {
-    AddJobScreen()
+    @Previewable @State var jobs:[Job] = []
+    AddJobScreen(NavigationViewModel(), jobs: $jobs)
 }
