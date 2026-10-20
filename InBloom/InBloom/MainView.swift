@@ -36,8 +36,6 @@ struct MainView: View
                         {
                             case .confirmJobDetails:
                                 ConfirmJobDetailsScreen(navVM: jobNavVM)
-                            case .jobDetail(let job):
-                                JobDetailScreen(job: job)
                             default:
                                 self
                         }
