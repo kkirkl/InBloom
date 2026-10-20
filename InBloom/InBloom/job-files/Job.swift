@@ -7,6 +7,19 @@
 
 import Foundation
 
+func filteredJobs(_ jobs:[Job], filter:JobFilter) -> [Job]
+{
+    var savedJobs:[Job] = []
+    for job in jobs
+    {
+        if filter.filterFunction(job)
+        {
+            savedJobs.append(job)
+        }
+    }
+    return savedJobs
+}
+
 struct Job: Hashable
 {
     static let defaultItems:[String] = ["Research company", "Tailor resume", "Write/review cover letter", "Email hiring manager"]

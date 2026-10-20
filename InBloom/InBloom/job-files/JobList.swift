@@ -10,6 +10,7 @@ import SwiftUI
 struct JobList: View
 {
     @Binding private var jobs:[Job]
+    var filter:JobFilter?
     
     init(jobs:Binding<[Job]>)
     {
@@ -38,7 +39,10 @@ struct JobList: View
             {
                 ForEach($jobs, id: \.self)
                 {(job) in
-                    JobListItem(job: job)
+                    if filter == nil || filter!.filterFunction(job.wrappedValue)
+                    {
+                        JobListItem(job: job)
+                    }
                 }
             }
         }
