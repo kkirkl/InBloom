@@ -16,6 +16,17 @@ struct Job: Hashable
     var isSaved:Bool = false
     var deadline:Date?
     var link:String?
+    var isCompleted:Bool
+    {
+        for status in itemCompletion
+        {
+            if !status
+            {
+                return false
+            }
+        }
+        return true
+    }
     
     func addItem(newItem:String) -> Job
     {
