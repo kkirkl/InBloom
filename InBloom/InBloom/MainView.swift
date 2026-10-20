@@ -16,6 +16,7 @@ enum TabScreen
 
 struct MainView: View
 {
+    @State private var jobs:[Job] = []
     @State private var currentTab:TabScreen = .garden
     @StateObject var jobNavVM:NavigationViewModel = NavigationViewModel()
     @StateObject var gardenNavVM:NavigationViewModel = NavigationViewModel()
@@ -25,31 +26,33 @@ struct MainView: View
     {
         TabView(selection: $currentTab)
         {
-            Tab("", systemImage: "list.clipboard", value: .jobs)
+            Tab("", systemImage: "list.clipboard", value: .jobs) // job tracker
             {
                 NavigationStack(path: $jobNavVM.path)
                 {
-                    JobTracker(navVM: jobNavVM)
+                    JobTracker(jobNavVM, jobs: $jobs)
                         .navigationDestination(for: Screen.self)
                     {(screen) in
                         switch screen
                         {
                             case .confirmJobDetails:
                                 ConfirmJobDetailsScreen(navVM: jobNavVM)
+                            case .addJob:
+                                AddJobScreen(jobNavVM, jobs: $jobs)
                             default:
                                 self
                         }
                     }
                 }
             }
-            Tab("", systemImage: "leaf.fill", value: .garden)
+            Tab("", systemImage: "leaf.fill", value: .garden) // garden
             {
                 NavigationStack(path: $gardenNavVM.path)
                 {
                     GardenScreen(navVM: gardenNavVM)
                 }
             }
-            Tab("", systemImage: "person.circle", value: .profile)
+            Tab("", systemImage: "person.circle", value: .profile) // profile
             {
                 NavigationStack(path: $profileNavVM.path)
                 {

@@ -9,11 +9,13 @@ import Foundation
 
 struct Job: Hashable
 {
+    static let defaultItems:[String] = ["Research company", "Tailor resume", "Write/review cover letter", "Email hiring manager"]
+    
     var company:String
     var title:String
-    var items:[String] = [] // TODO maybe have default items
-    var itemCompletion:[Bool] = []
-    var isSaved:Bool = false
+    var items:[String]
+    var itemCompletion:[Bool]
+    var isSaved:Bool
     var deadline:Date?
     var link:String?
     var isCompleted:Bool
@@ -26,6 +28,22 @@ struct Job: Hashable
             }
         }
         return true
+    }
+    
+    init(company:String, title:String, items:[String] = defaultItems, itemCompletion:[Bool] = [],
+         isSaved:Bool = false, deadline:Date? = nil, link:String? = nil, isCompleted:Bool = false)
+    {
+        self.company = company
+        self.title = title
+        self.items = items
+        self.itemCompletion = itemCompletion
+        if self.itemCompletion.count != self.items.count
+        {
+            self.itemCompletion = Array(repeating: false, count: items.count)
+        }
+        self.isSaved = isSaved
+        self.deadline = deadline
+        self.link = link
     }
     
     func addItem(newItem:String) -> Job

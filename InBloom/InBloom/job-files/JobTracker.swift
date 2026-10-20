@@ -54,9 +54,15 @@ struct JobTracker: View
     
     @ObservedObject var navVM:NavigationViewModel
     @State private var showAddSheet:Bool = false // should be false when not testing
-    @State private var jobs:[Job] = []
+    @Binding private var jobs:[Job]
     @State private var jobPasteField:String = ""
     @State private var currentFilter:Filter?
+    
+    init(_ navVM:NavigationViewModel, jobs:Binding<[Job]>)
+    {
+        self.navVM = navVM
+        self._jobs = jobs
+    }
     
     var body: some View
     {
@@ -144,7 +150,7 @@ struct JobTracker: View
                 }
                 Button
                 {
-                    
+                    showAddSheet = true
                 } label:
                 {
                     Text("+ Add a job")
@@ -212,7 +218,8 @@ struct JobTracker: View
                 Spacer()
                 Button
                 {
-                    showAddSheet = true
+                    showAddSheet = false
+                    navVM.pushScreen(screen: .addJob)
                 } label:
                 {
                     Text("+ Add manually")
@@ -255,14 +262,10 @@ struct JobTracker: View
         }
         return savedJobs
     }
-    
-    func temp()
-    {
-        
-    }
 }
 
 #Preview
 {
-    JobTracker(navVM: NavigationViewModel())
+    @Previewable @State var jobs:[Job] = []
+    JobTracker(NavigationViewModel(), jobs: $jobs)
 }
