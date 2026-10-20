@@ -95,7 +95,7 @@ struct JobTracker: View
                 .frame(maxWidth: .infinity)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            JobList(jobs: $jobs)
+            JobList(jobs: $jobs, filter: currentFilter)
             Button
             {
                 showAddSheet = true
@@ -199,6 +199,8 @@ struct JobTracker: View
 
 #Preview
 {
-    @Previewable @State var jobs:[Job] = []
+    @Previewable @State var jobs:[Job] =
+    [Job(company: "Roblox", title: "Product Designer"),
+    Job(company: "wawawa", title: "oooooo")]
     JobTracker(NavigationViewModel(), jobs: $jobs)
 }

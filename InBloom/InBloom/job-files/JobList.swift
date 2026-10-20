@@ -12,9 +12,10 @@ struct JobList: View
     @Binding private var jobs:[Job]
     var filter:JobFilter?
     
-    init(jobs:Binding<[Job]>)
+    init(jobs:Binding<[Job]>, filter:JobFilter?)
     {
         self._jobs = jobs
+        self.filter = filter
     }
     
     var body: some View
@@ -56,6 +57,6 @@ struct JobList: View
         Job(company: "Roblox again", title: "idk")]
     DefaultVStack
     {
-        JobList(jobs: $jobs)
+        JobList(jobs: $jobs, filter: nil)
     }
 }
