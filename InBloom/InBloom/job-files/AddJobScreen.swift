@@ -102,14 +102,6 @@ struct AddJobScreen: View
     {
         DefaultVStack(spacing: 20)
         {
-            VStack(alignment: .leading, spacing: 8)
-            {
-                Text("Add a job")
-                    .screenTitle()
-                Text("Fields marked * are required.")
-                    .caption()
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
             VStack(spacing: fieldSpacing)
             {
                 ForEach(Field.allCases, id: \.self)
@@ -155,6 +147,32 @@ struct AddJobScreen: View
                     }
             }
             .disabled(!isButtonEnabled)
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar
+        {
+            ToolbarItem(placement: .principal)
+            {
+                VStack(alignment: .leading, spacing: 0)
+                {
+                    Text("Add a job")
+                        .screenTitle()
+                    Text("Fields marked * are required.")
+                        .caption()
+                }
+            }
+            Group
+            {
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    Text("")
+                }
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    Text("")
+                }
+            }
+            .sharedBackgroundVisibility(.hidden)
         }
     }
 }
