@@ -118,6 +118,8 @@ struct EditStepsScreen: View
                                               dash: [6, 4])
                     }
             }
+            Text("Drag the handle to reorder. Tap the red minus to delete a step.")
+                .caption()
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar
