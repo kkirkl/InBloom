@@ -37,10 +37,12 @@ struct MainView: View
                         {
                             case .addJob:
                                 AddJobScreen(jobNavVM, jobs: $jobs)
-                            case let .jobDetail(jobIndex):
-                                JobDetailScreen(jobNavVM, jobs: $jobs, jobIndex: jobIndex)
                             case .confirmJobDetails:
                                 ConfirmJobDetailsScreen(navVM: jobNavVM)
+                            case let .jobDetail(jobIndex):
+                                JobDetailScreen(jobNavVM, jobs: $jobs, jobIndex: jobIndex)
+                            case let .editSteps(jobIndex):
+                                EditStepsScreen(jobNavVM, jobs: $jobs, jobIndex: jobIndex)
                             default:
                                 self
                         }

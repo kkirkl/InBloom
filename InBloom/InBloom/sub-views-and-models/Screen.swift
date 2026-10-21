@@ -17,4 +17,5 @@ enum Screen: Hashable
     case addJob
     case confirmJobDetails
     case jobDetail(jobIndex:Int)
+    case editSteps(jobIndex:Int)
 }

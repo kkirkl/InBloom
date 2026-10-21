@@ -12,6 +12,7 @@ struct JobDetailScreen: View
     @ObservedObject private var navVM:NavigationViewModel
     @Binding private var jobs:[Job]
     @Binding private var job:Job
+    var jobIndex:Int
     
     var nextStepMessage:String
     {
@@ -32,6 +33,7 @@ struct JobDetailScreen: View
         self.navVM = navVM
         self._jobs = jobs
         self._job = jobs[jobIndex]
+        self.jobIndex = jobIndex
     }
     
     var body: some View
@@ -127,13 +129,13 @@ struct JobDetailScreen: View
                         Spacer()
                         Button("Edit steps")
                         {
-                            // TODO
+                            navVM.pushEditSteps(index: jobIndex)
                         }
                         .font(.body)
                         .foregroundStyle(.brandPrimary)
                         .fontWeight(.semibold)
                     }
-                    LazyVStack(alignment: .leading)
+                    LazyVStack(alignment: .leading, spacing: 6)
                     {
                         ForEach(job.items.indices, id: \.self)
                         {(index) in
