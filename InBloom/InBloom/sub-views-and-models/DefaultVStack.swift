@@ -11,12 +11,15 @@ struct DefaultVStack<Content:View>: View
 {
     var alignment:HorizontalAlignment
     var spacing:CGFloat?
+    var padding:CGFloat
     var content: () -> Content
     
-    init(alignment:HorizontalAlignment = .center, spacing:CGFloat? = nil, @ViewBuilder content: @escaping () -> Content)
+    init(alignment:HorizontalAlignment = .center, spacing:CGFloat? = nil, padding:CGFloat = 20,
+         @ViewBuilder content: @escaping () -> Content)
     {
         self.alignment = alignment
         self.spacing = spacing
+        self.padding = padding
         self.content = content
     }
     
@@ -27,7 +30,7 @@ struct DefaultVStack<Content:View>: View
             Color(.backgroundDefault)
                 .ignoresSafeArea()
             VStack(alignment: alignment, spacing: spacing, content: content)
-                .padding(20)
+                .padding(padding)
         }
     }
 }
