@@ -13,6 +13,20 @@ struct JobDetailScreen: View
     @Binding private var jobs:[Job]
     @Binding private var job:Job
     
+    var nextStepMessage:String
+    {
+        let nextStep:String? = job.nextItem
+        if nextStep != nil
+        {
+            return nextStep!
+        } else if job.items.isEmpty
+        {
+            return "No steps yet!"
+        }
+        
+        return ""
+    }
+    
     init(_ navVM:NavigationViewModel, jobs:Binding<[Job]>, jobIndex:Int)
     {
         self.navVM = navVM
@@ -24,12 +38,6 @@ struct JobDetailScreen: View
     {
         DefaultVStack
         {
-            HStack
-            {
-                Text("Job Details")
-                    .screenTitle()
-                Spacer()
-            }
             HStack
             {
                 Image(systemName: "suitcase")
@@ -99,7 +107,7 @@ struct JobDetailScreen: View
                         .font(.caption)
                         .fontWeight(.semibold)
                         .foregroundStyle(.brandPrimary)
-                    Text(job.nextItem ?? "")
+                    Text(nextStepMessage)
                         .font(.body)
                         .fontWeight(.semibold)
                 }
@@ -127,21 +135,17 @@ struct JobDetailScreen: View
                     }
                     LazyVStack(alignment: .leading)
                     {
-                        ForEach(job.items, id: \.self)
-                        {(item) in
+                        ForEach(job.items.indices, id: \.self)
+                        {(index) in
                             Button
                             {
-                                
+                                job.itemCompletion[index].toggle()
                             } label:
                             {
                                 HStack
                                 {
-                                    RoundedRectBackground(color: .clear, cornerRadius: 8,
-                                                          borderColor: .textSecondary,
-                                                          borderWidth: 2)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .frame(width: 28)
-                                    Text(item)
+                                    CheckBox(checked: job.itemCompletion[index])
+                                    Text(job.items[index])
                                         .font(.body)
                                         .foregroundStyle(.textPrimary)
                                     Spacer()
@@ -161,6 +165,27 @@ struct JobDetailScreen: View
                     }
                 }
             }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar
+        {
+            ToolbarItem(placement: .principal)
+            {
+                Text("Job Details")
+                    .screenTitle()
+            }
+            Group
+            {
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    Text("")
+                }
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    Text("")
+                }
+            }
+            .sharedBackgroundVisibility(.hidden)
         }
     }
 }
