@@ -42,6 +42,26 @@ struct Job: Hashable
         }
         return true
     }
+    var completedCount:Int
+    {
+        var numOfItems:Int = 0
+        for i in 0 ..< itemCompletion.count
+        {
+            numOfItems += itemCompletion[i] ? 1 : 0
+        }
+        return numOfItems
+    }
+    var nextItem:String?
+    {
+        for i in items.indices
+        {
+            if !itemCompletion[i]
+            {
+                return items[i]
+            }
+        }
+        return nil
+    }
     
     init(company:String, title:String, items:[String] = defaultItems, itemCompletion:[Bool] = [],
          isSaved:Bool = false, deadline:Date? = nil, link:String? = nil, isCompleted:Bool = false)
@@ -79,16 +99,6 @@ struct Job: Hashable
         newCompletions[itemIndex].toggle()
         return Job(company: company, title: title, items: items, itemCompletion: newCompletions,
                    isSaved: isSaved, deadline: deadline, link: link)
-    }
-    
-    func completedItems() -> Int
-    {
-        var numOfItems:Int = 0
-        for i in 0 ..< itemCompletion.count
-        {
-            numOfItems += itemCompletion[i] ? 1 : 0
-        }
-        return numOfItems
     }
     
     func toggledSaved() -> Job

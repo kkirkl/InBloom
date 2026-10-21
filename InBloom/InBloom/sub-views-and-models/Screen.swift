@@ -16,5 +16,5 @@ enum Screen: Hashable
     case createProfile
     case addJob
     case confirmJobDetails
-    case jobDetail(job:Job)
+    case jobDetail(jobIndex:Int)
 }

@@ -9,13 +9,22 @@ import SwiftUI
 
 struct JobListItem: View
 {
-    @Binding var job:Job
+    @ObservedObject private var navVM:NavigationViewModel
+    @Binding private var job:Job
+    var jobIndex:Int
+    
+    init(_ navVM:NavigationViewModel, job:Binding<Job>, jobIndex:Int)
+    {
+        self.navVM = navVM
+        self._job = job
+        self.jobIndex = jobIndex
+    }
     
     var body: some View
     {
         Button
         {
-            
+            navVM.pushJobDetail(index: jobIndex)
         } label:
         {
             HStack
@@ -57,7 +66,7 @@ struct JobListItem: View
                                                   .brandPrimary : .backgroundMuted,
                                                   cornerRadius: 100)
                         }
-                        Text("\(job.completedItems()) of \(job.items.count) steps")
+                        Text("\(job.completedCount) of \(job.items.count) steps")
                             .caption()
                     }
                     
@@ -83,6 +92,6 @@ struct JobListItem: View
     @Previewable @State var example:Job = Job(company: "Roblox", title: "Product Designer")
     DefaultVStack
     {
-        JobListItem(job: $example)
+        JobListItem(NavigationViewModel(), job: $example, jobIndex: 0)
     }
 }

@@ -19,9 +19,9 @@ class NavigationViewModel: ObservableObject
         path.append(screen)
     }
     
-    func pushJobDetail(job:Job)
+    func pushJobDetail(index:Int)
     {
-        path.append(Screen.jobDetail(job: job))
+        path.append(Screen.jobDetail(jobIndex: index))
     }
     
     func popScreen()

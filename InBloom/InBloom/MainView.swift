@@ -16,7 +16,7 @@ enum TabScreen
 
 struct MainView: View
 {
-    @State private var jobs:[Job] = []
+    @State private var jobs:[Job] = [Job(company: "Roblox", title: "Product Designer")]
     @State private var currentTab:TabScreen = .garden
     @StateObject var jobNavVM:NavigationViewModel = NavigationViewModel()
     @StateObject var gardenNavVM:NavigationViewModel = NavigationViewModel()
@@ -35,10 +35,12 @@ struct MainView: View
                     {(screen) in
                         switch screen
                         {
-                            case .confirmJobDetails:
-                                ConfirmJobDetailsScreen(navVM: jobNavVM)
                             case .addJob:
                                 AddJobScreen(jobNavVM, jobs: $jobs)
+                            case let .jobDetail(jobIndex):
+                                JobDetailScreen(jobNavVM, jobs: $jobs, jobIndex: jobIndex)
+                            case .confirmJobDetails:
+                                ConfirmJobDetailsScreen(navVM: jobNavVM)
                             default:
                                 self
                         }

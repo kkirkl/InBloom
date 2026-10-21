@@ -9,11 +9,13 @@ import SwiftUI
 
 struct JobList: View
 {
+    @ObservedObject private var navVM:NavigationViewModel
     @Binding private var jobs:[Job]
     var filter:JobFilter?
     
-    init(jobs:Binding<[Job]>, filter:JobFilter?)
+    init(_ navVM:NavigationViewModel, jobs:Binding<[Job]>, filter:JobFilter?)
     {
+        self.navVM = navVM
         self._jobs = jobs
         self.filter = filter
     }
@@ -38,11 +40,11 @@ struct JobList: View
         {
             ScrollView
             {
-                ForEach($jobs, id: \.self)
-                {(job) in
-                    if filter == nil || filter!.filterFunction(job.wrappedValue)
+                ForEach(jobs.indices, id: \.self)
+                {(index) in
+                    if filter == nil || filter!.filterFunction(jobs[index])
                     {
-                        JobListItem(job: job)
+                        JobListItem(navVM, job: $jobs[index], jobIndex: index)
                     }
                 }
             }
@@ -57,6 +59,6 @@ struct JobList: View
         Job(company: "Roblox again", title: "idk")]
     DefaultVStack
     {
-        JobList(jobs: $jobs, filter: nil)
+        JobList(NavigationViewModel(), jobs: $jobs, filter: nil)
     }
 }

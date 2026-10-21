@@ -95,7 +95,7 @@ struct JobTracker: View
                 .frame(maxWidth: .infinity)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            JobList(jobs: $jobs, filter: currentFilter)
+            JobList(navVM, jobs: $jobs, filter: currentFilter)
             Button
             {
                 showAddSheet = true
