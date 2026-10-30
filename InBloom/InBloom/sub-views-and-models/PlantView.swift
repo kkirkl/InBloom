@@ -22,10 +22,10 @@ struct PlantView: View
     
     init(steps:Int, completed:Int)
     {
-        let stepSize:Double = Double(1) / Double(Stage.allCases.count)
-        var percentage:Double = Double(steps) / Double(completed)
-        var stage:Stage = .planted
-        for i in Stage.allCases.indices
+        let stepSize:Double = Double(1) / Double(Stage.allCases.count - 1)
+        var percentage:Double = Double(completed) / Double(steps)
+        var stage:Stage = completed == steps ? .bloomed : .planted
+        for i in 0 ..< Stage.allCases.count - 1
         {
             if (stepSize * Double(i)) <= percentage
                 && percentage < (stepSize * Double(i + 1))
@@ -57,5 +57,5 @@ struct PlantView: View
 
 #Preview
 {
-    PlantView(steps: 5, completed: 4)
+    PlantView(steps: 10, completed: 10)
 }
