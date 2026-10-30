@@ -9,15 +9,6 @@ import SwiftUI
 
 struct PlantView: View
 {
-    enum Stage: CaseIterable
-    {
-        case planted
-        case sprouting
-        case growing
-        case budding
-        case bloomed
-    }
-    
     var image:ImageResource?
     
     init(steps:Int, completed:Int)
@@ -51,7 +42,9 @@ struct PlantView: View
     var body: some View
     {
         Image(image!)
+            .resizable()
             .aspectRatio(1, contentMode: .fit)
+            
     }
 }
 

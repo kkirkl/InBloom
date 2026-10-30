@@ -91,17 +91,21 @@ struct JobDetailScreen: View
             {
                 HStack
                 {
-                    Text("plant art here :)")
-                        .section()
-                        .padding(.vertical, 40)
-                        .frame(maxWidth: .infinity)
-                        .background
+                    PlantView(steps: job.itemCount, completed: job.completedCount)
+                        .frame(width: 80)
+                    VStack
                     {
-                        RoundedRectBackground(color: .backgroundSurface, cornerRadius: 16,
-                                              borderColor: .borderDefault,
-                                              borderWidth: 1)
+                        Text("YOUR PLANT")
+                            .caption()
+                            .fontWeight(.semibold)
+                        Text()
                     }
-                    
+                }
+                .background
+                {
+                    RoundedRectBackground(color: .backgroundSurface, cornerRadius: 16,
+                                          borderColor: .borderDefault,
+                                          borderWidth: 1)
                 }
                 VStack(alignment: .leading)
                 {

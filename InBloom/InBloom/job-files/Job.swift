@@ -42,6 +42,10 @@ struct Job: Hashable
         }
         return true
     }
+    var itemCount:Int
+    {
+        return items.count
+    }
     var completedCount:Int
     {
         var numOfItems:Int = 0
@@ -61,6 +65,13 @@ struct Job: Hashable
             }
         }
         return nil
+    }
+    var plantStage:PlantStage
+    {
+        let completed
+        let stepSize:Double = Double(1) / Double(PlantStage.allCases.count - 1)
+        let percentage:Double = Double(completedCount) / Double(itemCount)
+        let temp:Int = Int(floor(percentage / stepSize))
     }
     
     init(company:String, title:String, items:[String] = defaultItems, itemCompletion:[Bool] = [],
