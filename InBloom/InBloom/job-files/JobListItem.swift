@@ -68,6 +68,7 @@ struct JobListItem: View
                         }
                         Text("\(job.completedCount) of \(job.items.count) steps")
                             .caption()
+                        SegmentedProgressView(value: job.completedCount, total: job.itemCount, height: 5)
                     }
                     
                 }

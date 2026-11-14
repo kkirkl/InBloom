@@ -108,7 +108,7 @@ struct JobTracker: View
                     .frame(maxWidth: .infinity)
                     .background
                     {
-                        RoundedRectBackground(color: .clear,
+                        RoundedRectBackground(color: .backgroundSurface,
                                               cornerRadius: buttonCornerRadius,
                                               borderColor: .brandPrimary,
                                               borderWidth: 2,
