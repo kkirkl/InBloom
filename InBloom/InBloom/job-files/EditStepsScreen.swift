@@ -54,8 +54,8 @@ struct EditStepsScreen: View
                         {
                             withAnimation(.interactiveSpring)
                             {
-                                job.items.remove(at: index)
-                                job.itemCompletion.remove(at: index)
+//                                job.items.remove(at: index)
+//                                job.itemCompletion.remove(at: index)
                             }
                         } label:
                         {
