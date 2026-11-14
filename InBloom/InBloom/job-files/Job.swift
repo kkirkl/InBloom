@@ -95,8 +95,13 @@ struct Job: Hashable, Identifiable
     }
     private var stageIndex:Int
     {
-        let completed:Int = completedCount
         let items:Int = itemCount
+        if items == 0
+        {
+            return 0
+        }
+        
+        let completed:Int = completedCount
         if completed == items
         {
             return PlantStage.allCases.count - 1
