@@ -28,6 +28,46 @@ struct JobDetailScreen: View
         return ""
     }
     
+    var nextStep: some View
+    {
+        VStack(alignment: .leading)
+        {
+            Text("NEXT STEP")
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundStyle(.brandPrimary)
+            Text(nextStepMessage)
+                .font(.body)
+                .fontWeight(.semibold)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(height: 56)
+        .background
+        {
+            RoundedRectBackground(color: .brandPrimaryLight, cornerRadius: 16)
+        }
+    }
+    
+    var viewPlant: some View
+    {
+        Button
+        {
+            
+        } label:
+        {
+            Text("View Plant")
+                .font(.button)
+                .foregroundStyle(.textOnPrimary)
+                .frame(height: 56)
+                .frame(maxWidth: .infinity)
+                .background
+                {
+                    RoundedRectBackground(color: .brandPrimary, cornerRadius: 16)
+                }
+        }
+    }
+    
     init(_ navVM:NavigationViewModel, jobs:Binding<[Job]>, jobIndex:Int)
     {
         self.navVM = navVM
@@ -91,39 +131,63 @@ struct JobDetailScreen: View
             {
                 HStack
                 {
-                    PlantView(steps: job.itemCount, completed: job.completedCount)
+                    ZStack
+                    {
+                        Group
+                        {
+                            Image(.emptyPot)
+                                .resizable()
+                                .aspectRatio(1, contentMode: .fit)
+                            PlantView(job: job)
+                                .transaction
+                                {(transaction) in
+                                    transaction.animation = .linear
+                                }
+                        }
                         .frame(width: 80)
-                    VStack
+                    }
+                    VStack(alignment: .leading, spacing: 8)
                     {
                         Text("YOUR PLANT")
                             .caption()
                             .fontWeight(.semibold)
-                        Text()
+                        Text(job.plantStage.description)
+                            .section()
+                            .padding(.top, -3)
+                        ProgressView(value: job.completionPercentage)
+                            .background(.backgroundDefault)
+                            .clipShape(.capsule)
+                            .tint(.brandPrimary)
+                            .transaction
+                            {(transaction) in
+                                transaction.animation = .easeInOut
+                            }
+                            .scaleEffect(x: 1, y: 2)
+                        Text("\(job.completedCount) of \(job.itemCount) "
+                             + "· next stage in \(job.itemsTillNextStage) "
+                             + "step\(job.itemsTillNextStage == 1 ? "" : "s" )")
+                            .caption()
                     }
+                    .padding(.leading, 16)
                 }
+                .padding(.vertical, 6)
+                .padding(.horizontal, 16)
                 .background
                 {
                     RoundedRectBackground(color: .backgroundSurface, cornerRadius: 16,
                                           borderColor: .borderDefault,
                                           borderWidth: 1)
                 }
-                VStack(alignment: .leading)
+                if job.completionPercentage < 1
                 {
-                    Text("NEXT STEP")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.brandPrimary)
-                    Text(nextStepMessage)
-                        .font(.body)
-                        .fontWeight(.semibold)
-                }
-                .padding(12)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background
+                    nextStep
+                        .padding(.bottom, 32)
+                } else
                 {
-                    RoundedRectBackground(color: .brandPrimaryLight, cornerRadius: 16)
+                    viewPlant
+                        .padding(.bottom, 32)
                 }
-                .padding(.bottom, 32)
+                
                 VStack
                 {
                     HStack
@@ -153,7 +217,8 @@ struct JobDetailScreen: View
                                     CheckBox(checked: job.itemCompletion[index])
                                     Text(job.items[index])
                                         .font(.body)
-                                        .foregroundStyle(.textPrimary)
+                                        .foregroundStyle(job.itemCompletion[index] ?
+                                            .textSecondary : .textPrimary)
                                     Spacer()
                                 }
                                 .padding(.vertical, 12)

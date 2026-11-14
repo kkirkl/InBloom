@@ -11,31 +11,21 @@ struct PlantView: View
 {
     var image:ImageResource?
     
-    init(steps:Int, completed:Int)
+    init(job:Job)
     {
-        let stepSize:Double = Double(1) / Double(Stage.allCases.count - 1)
-        var percentage:Double = Double(completed) / Double(steps)
-        var stage:Stage = completed == steps ? .bloomed : .planted
-        for i in 0 ..< Stage.allCases.count - 1
-        {
-            if (stepSize * Double(i)) <= percentage
-                && percentage < (stepSize * Double(i + 1))
-            {
-                stage = Stage.allCases[i]
-            }
-        }
+        let stage:PlantStage = job.plantStage
         switch stage
         {
             case .planted:
-                image = .plantStage1
+            image = .plantStage1Blue
             case .sprouting:
-                image = .plantStage2
+                image = .plantStage2Blue
             case .growing:
-                image = .plantStage3
+                image = .plantStage3Blue
             case .budding:
-                image = .plantStage4
+                image = .plantStage4Blue
             case .bloomed:
-                image = .plantStage5
+                image = .plantStage5Blue
         }
     }
     
@@ -44,11 +34,14 @@ struct PlantView: View
         Image(image!)
             .resizable()
             .aspectRatio(1, contentMode: .fit)
-            
     }
 }
 
 #Preview
 {
-    PlantView(steps: 10, completed: 10)
+    let job:Job = Job(company: "test", title: "testststs",
+                      items: ["", "", "", "", "", "", "", "", "", ""],
+                      itemCompletion: [true, true, true, true, true, true, true, true,
+                                       true, true])
+    PlantView(job: Job(company: "test", title: "testetstest", ))
 }

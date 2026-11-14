@@ -22,7 +22,8 @@ func filteredJobs(_ jobs:[Job], filter:JobFilter) -> [Job]
 
 struct Job: Hashable
 {
-    static let defaultItems:[String] = ["Research company", "Tailor resume", "Write/review cover letter", "Email hiring manager"]
+    static let defaultItems:[String] = ["Research company", "Tailor resume",
+                                        "Write/review cover letter", "Email hiring manager"]
     
     var company:String
     var title:String
@@ -68,10 +69,42 @@ struct Job: Hashable
     }
     var plantStage:PlantStage
     {
-        let completed
+        return PlantStage.allCases[stageIndex]
+    }
+    var completionPercentage:Double
+    {
+        let completed:Int = completedCount
+        let items:Int = itemCount
+        if completed == items
+        {
+            return 1
+        }
+        return Double(completed) / Double(items)
+    }
+    var itemsTillNextStage:Int
+    {
+        let completed:Int = completedCount
+        let items:Int = itemCount
+        if completed == items
+        {
+            return 0
+        }
+        let nextStagePercentage:Double = Double(stageIndex + 1) / Double(PlantStage.allCases.count - 1)
+        let neededItems:Int = Int(ceil(nextStagePercentage * Double(items)))
+        return neededItems - completed
+    }
+    private var stageIndex:Int
+    {
+        let completed:Int = completedCount
+        let items:Int = itemCount
+        if completed == items
+        {
+            return PlantStage.allCases.count - 1
+        }
+        
         let stepSize:Double = Double(1) / Double(PlantStage.allCases.count - 1)
-        let percentage:Double = Double(completedCount) / Double(itemCount)
-        let temp:Int = Int(floor(percentage / stepSize))
+        let percentage:Double = Double(completed) / Double(items)
+        return Int(floor(percentage / stepSize))
     }
     
     init(company:String, title:String, items:[String] = defaultItems, itemCompletion:[Bool] = [],
@@ -112,7 +145,7 @@ struct Job: Hashable
                    isSaved: isSaved, deadline: deadline, link: link)
     }
     
-    func toggledSaved() -> Job
+    func savedToggled() -> Job
     {
         return Job(company: company, title: title, items: items, itemCompletion: itemCompletion,
                    isSaved: !isSaved, deadline: deadline, link: link)

@@ -43,7 +43,7 @@ struct StartScreen: View
                                 .font(.system(size: 18))
                                 .foregroundStyle(.textSecondary)
                         }
-                        Image(.plantStage5)
+                        Image(.plantStage5Blue)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 268)

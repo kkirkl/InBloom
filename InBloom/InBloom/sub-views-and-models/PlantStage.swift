@@ -12,4 +12,21 @@ enum PlantStage: CaseIterable
     case growing
     case budding
     case bloomed
+    
+    var description:String
+    {
+        switch self
+        {
+        case .planted:
+            "Seed Planted"
+        case .sprouting:
+            "Sprouting"
+        case .growing:
+            "Growing"
+        case .budding:
+            "Almost Bloomed"
+        case .bloomed:
+            "Bloomed!"
+        }
+    }
 }
