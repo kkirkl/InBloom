@@ -10,6 +10,14 @@ import SwiftUI
 struct GardenScreen: View
 {
     @ObservedObject var navVM:NavigationViewModel
+    @Binding private var jobs:[Job]
+    
+    init(navVM: NavigationViewModel, jobs:Binding<[Job]>)
+    {
+        self.navVM = navVM
+        self._jobs = jobs
+    }
+    
     var body: some View
     {
         ZStack
@@ -29,13 +37,10 @@ struct GardenScreen: View
                 VStack(alignment: .leading, spacing: 10)
                 {
                     Text("Your garden")
-                        .font(.system(size: 40, weight: .bold))
-                        .foregroundStyle(.textPrimary)
+                        .screenTitle()
                     Text("0 plants")
-                        .foregroundStyle(.textSecondary)
+                        .caption()
                 }
-                .padding(.leading, 20)
-                .padding(.top, 20)
                 .padding(.bottom, 80)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 VStack
@@ -43,22 +48,32 @@ struct GardenScreen: View
                     VStack(spacing: 10)
                     {
                         Text("Your garden is empty")
-                            .foregroundStyle(.textPrimary)
-                            .font(.system(size: 20, weight: .semibold))
+                            .section()
                         Text("Add a job in Job Tracker to plant your first seed.")
-                            .foregroundStyle(.textSecondary)
+                            .body()
                             .multilineTextAlignment(.center)
                     }
                     .frame(width: 300)
                     Spacer()
+                    HStack
+                    {
+                        ForEach(jobs, id: \.id)
+                        {(job) in
+                            PlantView(job: job)
+                        }
+                    }
+                    Spacer()
                 }
             }
+            .padding(20)
         }
-//        .ignoresSafeArea()
     }
 }
 
 #Preview
 {
-    GardenScreen(navVM: NavigationViewModel())
+    @Previewable @State var jobs:[Job] =
+        [Job(company: "Roblox", title: "Product Designer"),
+        Job(company: "Roblox again", title: "idk")]
+    GardenScreen(navVM: NavigationViewModel(), jobs: $jobs)
 }

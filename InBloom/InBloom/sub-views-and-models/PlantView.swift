@@ -33,15 +33,14 @@ struct PlantView: View
     {
         Image(image!)
             .resizable()
-            .aspectRatio(1, contentMode: .fit)
+            .aspectRatio(contentMode: .fit)
     }
 }
 
 #Preview
 {
     let job:Job = Job(company: "test", title: "testststs",
-                      items: ["", "", "", "", "", "", "", "", "", ""],
-                      itemCompletion: [true, true, true, true, true, true, true, true,
-                                       true, true])
-    PlantView(job: Job(company: "test", title: "testetstest", ))
+                      items: ["", "", "", ""],
+                      itemCompletion: [false, false, false, false])
+    PlantView(job: job)
 }

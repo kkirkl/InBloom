@@ -53,7 +53,7 @@ struct MainView: View
             {
                 NavigationStack(path: $gardenNavVM.path)
                 {
-                    GardenScreen(navVM: gardenNavVM)
+                    GardenScreen(navVM: gardenNavVM, jobs: $jobs)
                 }
             }
             Tab("", systemImage: "person.circle", value: .profile) // profile

@@ -137,14 +137,14 @@ struct JobDetailScreen: View
                         {
                             Image(.emptyPot)
                                 .resizable()
-                                .aspectRatio(1, contentMode: .fit)
+                                .aspectRatio(contentMode: .fit)
                             PlantView(job: job)
                                 .transaction
                                 {(transaction) in
                                     transaction.animation = .linear
                                 }
                         }
-                        .frame(width: 80)
+                        .frame(width: 80, height: 101)
                     }
                     VStack(alignment: .leading, spacing: 8)
                     {

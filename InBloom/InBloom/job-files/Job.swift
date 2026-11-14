@@ -20,11 +20,11 @@ func filteredJobs(_ jobs:[Job], filter:JobFilter) -> [Job]
     return savedJobs
 }
 
-struct Job: Hashable
+struct Job: Hashable, Identifiable
 {
     static let defaultItems:[String] = ["Research company", "Tailor resume",
                                         "Write/review cover letter", "Email hiring manager"]
-    
+    var id:UUID = UUID()
     var company:String
     var title:String
     var items:[String]
