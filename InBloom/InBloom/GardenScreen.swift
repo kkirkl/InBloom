@@ -38,7 +38,7 @@ struct GardenScreen: View
                 {
                     Text("Your garden")
                         .screenTitle()
-                    Text("0 plants")
+                    Text("\(jobs.count) plant\(jobs.count == 1 ? "" : "s")")
                         .caption()
                 }
                 .padding(.bottom, 80)
@@ -57,9 +57,18 @@ struct GardenScreen: View
                     Spacer()
                     HStack
                     {
+                        Spacer()
                         ForEach(jobs, id: \.id)
                         {(job) in
-                            PlantView(job: job)
+                            VStack
+                            {
+                                PlantView(job: job)
+                                    .frame(width: 120)
+                                Text("\(job.title) · \(job.company)")
+                                    .font(.body)
+                                    .fontWeight(.semibold)
+                            }
+                            Spacer()
                         }
                     }
                     Spacer()
