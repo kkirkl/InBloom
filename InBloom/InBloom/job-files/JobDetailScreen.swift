@@ -10,6 +10,7 @@ import SwiftUI
 struct JobDetailScreen: View
 {
     @ObservedObject private var navVM:NavigationViewModel
+    @Binding private var currentTab:TabScreen
     @Binding private var jobs:[Job]
     @Binding private var job:Job
     var jobIndex:Int
@@ -53,7 +54,7 @@ struct JobDetailScreen: View
     {
         Button
         {
-            
+            currentTab = .garden
         } label:
         {
             Text("View Plant")
@@ -68,9 +69,10 @@ struct JobDetailScreen: View
         }
     }
     
-    init(_ navVM:NavigationViewModel, jobs:Binding<[Job]>, jobIndex:Int)
+    init(_ navVM:NavigationViewModel, _ currentTab:Binding<TabScreen>, jobs:Binding<[Job]>, jobIndex:Int)
     {
         self.navVM = navVM
+        self._currentTab = currentTab
         self._jobs = jobs
         self._job = jobs[jobIndex]
         self.jobIndex = jobIndex
@@ -264,5 +266,6 @@ struct JobDetailScreen: View
 #Preview
 {
     @Previewable @State var test:[Job] = [Job(company: "Roblox", title: "Product Designer")]
-    JobDetailScreen(NavigationViewModel(), jobs: $test, jobIndex: 0)
+    @Previewable @State var currentTab:TabScreen = .jobs
+    JobDetailScreen(NavigationViewModel(), $currentTab, jobs: $test, jobIndex: 0)
 }

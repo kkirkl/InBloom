@@ -40,7 +40,7 @@ struct MainView: View
                             case .confirmJobDetails:
                                 ConfirmJobDetailsScreen(navVM: jobNavVM)
                             case let .jobDetail(jobIndex):
-                                JobDetailScreen(jobNavVM, jobs: $jobs, jobIndex: jobIndex)
+                                JobDetailScreen(jobNavVM, $currentTab, jobs: $jobs, jobIndex: jobIndex)
                             case let .editSteps(jobIndex):
                                 EditStepsScreen(jobNavVM, jobs: $jobs, jobIndex: jobIndex)
                             default:
