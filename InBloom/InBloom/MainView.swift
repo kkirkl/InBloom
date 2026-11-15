@@ -26,7 +26,7 @@ struct MainView: View
     {
         TabView(selection: $currentTab)
         {
-            Tab("", systemImage: "list.clipboard", value: .jobs) // job tracker
+            Tab("", systemImage: "list.bullet.clipboard", value: .jobs) // job tracker
             {
                 NavigationStack(path: $jobNavVM.path)
                 {
@@ -64,7 +64,7 @@ struct MainView: View
                 }
             }
         }
-        .tint(.green)
+        .tint(.brandPrimary)
     }
 }
 
