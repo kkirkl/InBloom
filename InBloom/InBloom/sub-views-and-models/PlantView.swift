@@ -13,7 +13,7 @@ struct PlantView: View
     
     init(job:Job)
     {
-        let stage:PlantStage = job.plantStage
+        let stage:PlantStage = job.plantStage()
         switch stage
         {
             case .planted:

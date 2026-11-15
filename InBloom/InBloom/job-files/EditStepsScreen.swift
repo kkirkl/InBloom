@@ -46,7 +46,7 @@ struct EditStepsScreen: View
                 .body()
             List
             {
-                ForEach(job.items.indices, id: \.self)
+                ForEach(0 ..< job.itemCount(), id: \.self)
                 {(index) in
                     HStack
                     {
@@ -63,7 +63,7 @@ struct EditStepsScreen: View
                                 .font(.section)
                                 .foregroundStyle(.stateError)
                         }
-                        Text(job.items[index])
+                        Text(job.getItem(at: index)!)
                             .font(.body)
                             .foregroundStyle(.textPrimary)
                         Spacer()
@@ -87,13 +87,11 @@ struct EditStepsScreen: View
                 }
                 .onDelete
                 {(indexSet) in
-                    job.items.remove(atOffsets: indexSet)
-                    job.itemCompletion.remove(atOffsets: indexSet)
+                    job = job.removeItems(atOffsets: indexSet)
                 }
                 .onMove
                 {(sourceIndexSet, destIndex) in
-                    job.items.move(fromOffsets: sourceIndexSet, toOffset: destIndex)
-                    job.itemCompletion.move(fromOffsets: sourceIndexSet, toOffset: destIndex)
+                    job = job.moveItems(fromOffsets: sourceIndexSet, toOffset: destIndex)
                 }
                 .frame(width: 360)
             }

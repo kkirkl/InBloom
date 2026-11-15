@@ -29,11 +29,11 @@ enum JobFilter: CaseIterable, Hashable
         switch self
         {
             case .saved:
-                {job in job.isSaved}
+                {job in job.isSaved()}
             case .inProgress:
-                {job in !job.isCompleted}
+                {job in !job.isCompleted()}
             case .done:
-                {job in job.isCompleted}
+                {job in job.isCompleted()}
         }
     }
 }

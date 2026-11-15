@@ -39,36 +39,36 @@ struct JobListItem: View
                     }
                 VStack(alignment: .leading, spacing: 4)
                 {
-                    Text(job.title)
+                    Text(job.getTitle())
                         .font(.body)
                         .foregroundStyle(.textPrimary)
                         .fontWeight(.semibold)
-                    Text(job.company)
+                    Text(job.getCompany())
                         .caption()
                         .padding(.bottom, 1)
                     HStack
                     {
                         Button
                         {
-                            job.isSaved.toggle()
+                            job = job.savedToggled()
                         } label:
                         {
                             Text("Saved")
                                 .font(.caption)
-                                .foregroundStyle(job.isSaved ? .textOnPrimary : .textSecondary)
+                                .foregroundStyle(job.isSaved() ? .textOnPrimary : .textSecondary)
                                 .fontWeight(.semibold)
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 4)
                         }
                         .background
                         {
-                            RoundedRectBackground(color: job.isSaved ?
+                            RoundedRectBackground(color: job.isSaved() ?
                                                   .brandPrimary : .backgroundMuted,
                                                   cornerRadius: 100)
                         }
-                        Text("\(job.completedCount) of \(job.items.count) steps")
+                        Text("\(job.completedCount()) of \(job.itemCount()) steps")
                             .caption()
-                        SegmentedProgressView(value: job.completedCount, total: job.itemCount, height: 5)
+                        SegmentedProgressView(value: job.completedCount(), total: job.itemCount(), height: 5)
                     }
                     
                 }

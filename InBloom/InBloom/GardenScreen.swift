@@ -64,7 +64,7 @@ struct GardenScreen: View
                             {
                                 PlantView(job: job)
                                     .frame(width: 120)
-                                Text("\(job.title) · \(job.company)")
+                                Text("\(job.getTitle()) · \(job.getCompany())")
                                     .font(.body)
                                     .fontWeight(.semibold)
                             }

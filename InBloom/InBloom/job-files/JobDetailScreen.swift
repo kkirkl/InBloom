@@ -17,11 +17,11 @@ struct JobDetailScreen: View
     
     var nextStepMessage:String
     {
-        let nextStep:String? = job.nextItem
+        let nextStep:String? = job.nextItem()
         if nextStep != nil
         {
             return nextStep!
-        } else if job.items.isEmpty
+        } else if job.itemCount() == 0
         {
             return "No steps yet!"
         }
@@ -94,9 +94,9 @@ struct JobDetailScreen: View
                 }
                 VStack(alignment: .leading)
                 {
-                    Text(job.title)
+                    Text(job.getTitle())
                         .section()
-                    Text(job.company)
+                    Text(job.getCompany())
                         .caption()
                 }
                 Spacer()
@@ -104,19 +104,19 @@ struct JobDetailScreen: View
                 {
                     Button
                     {
-                        job.isSaved.toggle()
+                        job = job.savedToggled()
                     } label:
                     {
                         Text("Saved")
                             .font(.caption)
-                            .foregroundStyle(job.isSaved ? .textOnPrimary : .textSecondary)
+                            .foregroundStyle(job.isSaved() ? .textOnPrimary : .textSecondary)
                             .fontWeight(.semibold)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 4)
                     }
                     .background
                     {
-                        RoundedRectBackground(color: job.isSaved ?
+                        RoundedRectBackground(color: job.isSaved() ?
                             .brandPrimary : .backgroundMuted,
                                               cornerRadius: 100)
                     }
@@ -153,10 +153,10 @@ struct JobDetailScreen: View
                         Text("YOUR PLANT")
                             .caption()
                             .fontWeight(.semibold)
-                        Text(job.plantStage.description)
+                        Text(job.plantStage().description)
                             .section()
                             .padding(.top, -3)
-                        ProgressView(value: job.completionPercentage)
+                        ProgressView(value: job.completionPercentage())
                             .background(.backgroundDefault)
                             .clipShape(.capsule)
                             .tint(.brandPrimary)
@@ -165,9 +165,9 @@ struct JobDetailScreen: View
                                 transaction.animation = .easeInOut
                             }
                             .scaleEffect(x: 1, y: 2)
-                        Text("\(job.completedCount) of \(job.itemCount) "
-                             + "· next stage in \(job.itemsTillNextStage) "
-                             + "step\(job.itemsTillNextStage == 1 ? "" : "s" )")
+                        Text("\(job.completedCount()) of \(job.itemCount()) "
+                             + "· next stage in \(job.itemsTillNextStage()) "
+                             + "step\(job.itemsTillNextStage() == 1 ? "" : "s" )")
                             .caption()
                     }
                     .padding(.leading, 16)
@@ -180,7 +180,7 @@ struct JobDetailScreen: View
                                           borderColor: .borderDefault,
                                           borderWidth: 1)
                 }
-                if job.completionPercentage < 1
+                if !job.isCompleted()
                 {
                     nextStep
                         .padding(.bottom, 32)
@@ -207,19 +207,19 @@ struct JobDetailScreen: View
                     }
                     LazyVStack(alignment: .leading, spacing: 6)
                     {
-                        ForEach(job.items.indices, id: \.self)
+                        ForEach(0 ..< job.itemCount(), id: \.self)
                         {(index) in
                             Button
                             {
-                                job.itemCompletion[index].toggle()
+                                job = job.itemToggled(at: index) ?? job
                             } label:
                             {
                                 HStack
                                 {
-                                    CheckBox(checked: job.itemCompletion[index])
-                                    Text(job.items[index])
+                                    CheckBox(checked: job.isItemComplete(itemIndex: index))
+                                    Text(job.getItem(at: index)!)
                                         .font(.body)
-                                        .foregroundStyle(job.itemCompletion[index] ?
+                                        .foregroundStyle(job.isItemComplete(itemIndex: index) ?
                                             .textSecondary : .textPrimary)
                                     Spacer()
                                 }

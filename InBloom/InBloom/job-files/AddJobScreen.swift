@@ -33,7 +33,7 @@ struct AddJobScreen: View
                 case .applicationDate:
                     "Application date"
                 case .deadline:
-                    "deadline"
+                    "Deadline"
                     
             }
         }
