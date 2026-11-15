@@ -15,8 +15,8 @@ struct AddJobScreen: View
         case jobTitle = 1
         case location = 2
         case link = 3
-        case applicationDate = 4
-        case deadline = 5
+        case applicationGoal = 4
+        case applicaitonDeadline = 5
         
         var label:String
         {
@@ -30,10 +30,10 @@ struct AddJobScreen: View
                     "Location"
                 case .link:
                     "Link"
-                case .applicationDate:
-                    "Application date"
-                case .deadline:
-                    "Deadline"
+                case .applicationGoal:
+                    "Personal deadline"
+                case .applicaitonDeadline:
+                    "Company deadline"
                     
             }
         }
@@ -50,9 +50,9 @@ struct AddJobScreen: View
                     "City or remote"
                 case .link:
                     "Pase job link"
-                case .applicationDate:
+                case .applicationGoal:
                     "Select date"
-                case .deadline:
+                case .applicaitonDeadline:
                     "Select date"
                     
             }
@@ -81,10 +81,15 @@ struct AddJobScreen: View
     let buttonInternalPadding:CGFloat = 18
     let fieldSpacing:CGFloat = 12
     
+    let applicationGoalHint:String = "Your own target date for applying."
+    let applicationDeadlineHint:String = "When the company stops accepting applications."
+    
     @ObservedObject var navVM:NavigationViewModel
     @Binding var jobs:[Job]
     @FocusState private var focusedField:Int?
     @State private var fieldValues:[String]
+    @State private var applicationGoal:Date?
+    @State private var applicationDeadline:Date?
     
     var isButtonEnabled:Bool
     {
@@ -96,6 +101,8 @@ struct AddJobScreen: View
         self.navVM = navVM
         self._jobs = jobs
         self.fieldValues = Array(repeating: "", count: Field.allCases.count)
+        self.applicationGoal = nil
+        self.applicationDeadline = nil
     }
     
     var body: some View
@@ -106,33 +113,74 @@ struct AddJobScreen: View
             {
                 ForEach(Field.allCases, id: \.self)
                 {(field) in
-                    VStack(alignment: .leading, spacing: 0)
+                    VStack(alignment: .leading, spacing: 4)
                     {
-                        // "[field label] ["*" if required]"
-                        Text("\(field.label) \(field.isRequired ? "*" : "")")
-                            .caption()
-                        TextField("\(field.label) field",
-                                  text: $fieldValues[field.rawValue],
-                                  prompt: Text(field.prompt))
-                            .focused($focusedField, equals: field.rawValue)
+                        VStack(alignment: .leading, spacing: 0)
+                        {
+                            Text("\(field.label) \(field.isRequired ? "*" : "(optional)")")
+                                .caption()
+                            if field != .applicationGoal && field != .applicaitonDeadline
+                            {
+                                TextField("\(field.label) field",
+                                          text: $fieldValues[field.rawValue],
+                                          prompt: Text(field.prompt))
+                                .focused($focusedField, equals: field.rawValue)
+                                .font(.body)
+                                .foregroundStyle(.textPrimary)
+                            } else if field == .applicationGoal
+                            {
+                                CustomDatePicker(date: $applicationGoal)
+                                    .foregroundStyle(.textPrimary)
+                                    .font(.body)
+                            } else if field == .applicaitonDeadline
+                            {
+                                CustomDatePicker(date: $applicationDeadline)
+                                    .foregroundStyle(.textPrimary)
+                                    .font(.body)
+                            }
+                        }
+                        .padding(16)
+                        .background
+                        {
+                            RoundedRectBackground(
+                                color: .backgroundSurface,
+                                cornerRadius: field.rawValue == focusedField ?
+                                              (rectCornerRadius + 1) : rectCornerRadius,
+                                borderColor: field.rawValue == focusedField ?
+                                             .brandPrimary : .borderDefault,
+                                borderWidth: rectBorderWidth)
+                        }
+                        .onTapGesture
+                        {
+                            focusedField = field.rawValue
+                        }
+                        Group
+                        {
+                            if field == .applicationGoal
+                            {
+                                Text(applicationGoalHint)
+                                    .caption()
+                            } else if field == .applicaitonDeadline
+                            {
+                                Text(applicationDeadlineHint)
+                                    .caption()
+                            }
+                        }
+                        .padding(.leading, 4)
                     }
-                    .padding(16)
-                    .background
-                    {
-                        RoundedRectBackground(
-                            color: .backgroundSurface,
-                            cornerRadius: field.rawValue == focusedField ?
-                                          (rectCornerRadius + 1) : rectCornerRadius,
-                            borderColor: field.rawValue == focusedField ?
-                                         .brandPrimary : .borderDefault,
-                            borderWidth: rectBorderWidth)
-                    }
+                    
                 }
             }
             Spacer()
             Button
             {
-                jobs.append(Job(company: fieldValues[Field.company.rawValue], title: fieldValues[Field.jobTitle.rawValue]))
+                var link:String? = fieldValues[Field.link.rawValue]
+                link = link!.isEmpty ? nil : link
+                var newJob:Job = Job(company: fieldValues[Field.company.rawValue],
+                                     title: fieldValues[Field.jobTitle.rawValue], link: link,
+                                     applicationGoal: applicationGoal,
+                                     applicationDeadline: applicationDeadline)
+                jobs.append(newJob)
                 navVM.popScreen()
             } label:
             {
