@@ -32,6 +32,11 @@ struct DefaultVStack<Content:View>: View
             VStack(alignment: alignment, spacing: spacing, content: content)
                 .padding(padding)
         }
+        .tint(.brandPrimary)
+        .onTapGesture
+        {
+            hideKeyboard()
+        }
     }
 }
 
