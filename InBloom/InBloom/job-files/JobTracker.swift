@@ -142,10 +142,10 @@ struct JobTracker: View
                     {
                         // TODO
                     }
-                    .foregroundStyle(jobPasteField.isEmpty ? .textDisabled : .brandPrimary)
+                    .foregroundStyle(.brandPrimary)
                     .textInputAutocapitalization(.never)
                     .font(.system(size: 20, weight: .semibold))
-                    .disabled(jobPasteField.isEmpty)
+//                    .disabled(jobPasteField.isEmpty)
                 }
                 .padding(20)
                 .overlay
