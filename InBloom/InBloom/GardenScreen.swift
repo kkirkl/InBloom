@@ -45,15 +45,19 @@ struct GardenScreen: View
                 .frame(maxWidth: .infinity, alignment: .leading)
                 VStack
                 {
-                    VStack(spacing: 10)
+                    if jobs.isEmpty
                     {
-                        Text("Your garden is empty")
-                            .section()
-                        Text("Add a job in Job Tracker to plant your first seed.")
-                            .body()
-                            .multilineTextAlignment(.center)
+                        VStack(spacing: 10)
+                        {
+                            Text("Your garden is empty")
+                                .section()
+                            Text("Add a job in Job Tracker to plant your first seed.")
+                                .body()
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(width: 300)
+                        
                     }
-                    .frame(width: 300)
                     Spacer()
                     HStack
                     {
