@@ -115,7 +115,6 @@ struct JobTracker: View
                                               dash: [6, 4])
                     }
             }
-            .padding(.bottom, 40)
         }
         .sheet(isPresented: $showAddSheet)
         {
