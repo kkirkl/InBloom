@@ -145,10 +145,6 @@ struct JobDetailScreen: View
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                             PlantView(job: job)
-                                .transaction
-                                {(transaction) in
-                                    transaction.animation = .linear
-                                }
                         }
                         .frame(width: 80, height: 101)
                     }
@@ -160,19 +156,15 @@ struct JobDetailScreen: View
                         Text(job.plantStage().description)
                             .section()
                             .padding(.top, -3)
-                            .transaction
-                            {(transaction) in
-                                transaction.animation = nil
-                            }
+//                            .transaction
+//                            {(transaction) in
+//                                transaction.animation = nil
+//                            }
                         ProgressView(value: job.completionPercentage())
                             .background(.backgroundDefault)
                             .clipShape(.capsule)
                             .tint(.brandPrimary)
                             .scaleEffect(x: 1, y: 2)
-                            .transaction
-                            {(transaction) in
-                                transaction.animation = .easeInOut
-                            }
                         Text("\(job.completedCount()) of \(job.itemCount()) "
                              + "· next stage in \(job.itemsTillNextStage()) "
                              + "step\(job.itemsTillNextStage() == 1 ? "" : "s" )")
@@ -219,8 +211,14 @@ struct JobDetailScreen: View
                         {(index) in
                             Button
                             {
-                                job = job.itemToggled(at: index) ?? job
-                                
+                                DispatchQueue.main.async
+                                {
+                                    withAnimation(.easeInOut(duration: 5))
+                                    {
+                                        job = job.itemToggled(at: index) ?? job
+                                    }
+                                    
+                                }
                             } label:
                             {
                                 HStack
@@ -233,10 +231,7 @@ struct JobDetailScreen: View
                                             color: .textSecondary, lineWidth: 1))
                                         .foregroundStyle(job.isItemComplete(itemIndex: index)! ?
                                             .textSecondary : .textPrimary)
-                                        .transaction
-                                        {(transaction) in
-                                            transaction.animation = .linear
-                                        }
+                                        .multilineTextAlignment(.leading)
                                     Spacer()
                                 }
                                 .padding(.vertical, 12)
