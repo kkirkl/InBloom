@@ -229,6 +229,10 @@ struct JobDetailScreen: View
                                 HStack
                                 {
                                     CheckBox(checked: job.isItemComplete(itemIndex: index)!)
+                                        .transaction
+                                        {(transaction) in
+                                            transaction.animation = nil
+                                        }
                                     Text(job.getItem(at: index)!)
                                         .font(.body)
                                         .textRenderer(StrikethroughRenderer(
