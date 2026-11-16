@@ -230,8 +230,9 @@ struct Job: Hashable, Identifiable
                    applicationDeadline: applicationDeadline)
     }
     
-    func isItemComplete(itemIndex:Int) -> Bool
+    func isItemComplete(itemIndex:Int) -> Bool?
     {
+        guard 0 <= itemIndex && itemIndex < items.count else {return nil}
         return itemCompletion[itemIndex]
     }
     
