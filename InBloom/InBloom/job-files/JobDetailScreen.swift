@@ -219,8 +219,9 @@ struct JobDetailScreen: View
                                     CheckBox(checked: job.isItemComplete(itemIndex: index)!)
                                     Text(job.getItem(at: index)!)
                                         .font(.body)
-                                        .strikethrough(job.isItemComplete(itemIndex: index)!,
-                                                       color: .textSecondary)
+//                                        .strikethrough(job.isItemComplete(itemIndex: index)!,
+//                                                       color: .textSecondary)
+                                        .textRenderer(StrikethroughRenderer(color: .textSecondary, lineWidth: 2))
                                         .transaction
                                         {(transaction) in
                                             transaction.animation = .linear
