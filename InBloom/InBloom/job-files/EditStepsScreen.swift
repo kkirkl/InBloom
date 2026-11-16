@@ -158,9 +158,11 @@ struct EditStepsScreen: View
     {
         DefaultVStack
         {
-            Text("Add, rename, reorder or delete steps for this\njob. To change the company, "
-               + "title or dates, use\nEdit details.")
+            Text("Add, rename, reorder or delete steps for this job. To change the company, "
+               + "title or dates, use Edit details.")
                 .body()
+                .frame(maxWidth: .infinity)
+                .multilineTextAlignment(.leading)
             List
             {
                 ForEach(0 ..< job.itemCount(), id: \.self)
@@ -192,6 +194,7 @@ struct EditStepsScreen: View
                                 .font(.body)
                                 .foregroundStyle(.textPrimary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                                .multilineTextAlignment(.leading)
                         }
                         .buttonStyle(.borderless)
                         Image(systemName: "circle.grid.3x3.fill")
@@ -211,6 +214,7 @@ struct EditStepsScreen: View
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
                     .scrollContentBackground(.hidden)
+                    .listRowInsets(.horizontal, 0)
                 }
                 .onDelete
                 {(indexSet) in
@@ -220,7 +224,7 @@ struct EditStepsScreen: View
                 {(sourceIndexSet, destIndex) in
                     job = job.moveItems(fromOffsets: sourceIndexSet, toOffset: destIndex)
                 }
-                .frame(width: 360)
+//                .frame(width: 360)
             }
             .listStyle(.plain)
             .listRowSpacing(-22)

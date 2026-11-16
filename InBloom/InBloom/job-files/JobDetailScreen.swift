@@ -144,11 +144,11 @@ struct JobDetailScreen: View
                             Image(.emptyPot)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
+                            PlantView(job: job)
                                 .transaction
                                 {(transaction) in
-                                    transaction.animation = nil
+                                    transaction.animation = .linear
                                 }
-                            PlantView(job: job)
                         }
                         .frame(width: 80, height: 101)
                     }
@@ -169,14 +169,14 @@ struct JobDetailScreen: View
                             .clipShape(.capsule)
                             .tint(.brandPrimary)
                             .scaleEffect(x: 1, y: 2)
+                            .transaction
+                            {(transaction) in
+                                transaction.animation = .easeInOut
+                            }
                         Text("\(job.completedCount()) of \(job.itemCount()) "
                              + "· next stage in \(job.itemsTillNextStage()) "
                              + "step\(job.itemsTillNextStage() == 1 ? "" : "s" )")
                             .caption()
-                            .transaction
-                            {(transaction) in
-                                transaction.animation = nil
-                            }
                     }
                     .padding(.leading, 16)
                 }
@@ -219,20 +219,13 @@ struct JobDetailScreen: View
                         {(index) in
                             Button
                             {
-                                withAnimation
-                                {
-                                    job = job.itemToggled(at: index) ?? job
-                                }
+                                job = job.itemToggled(at: index) ?? job
                                 
                             } label:
                             {
                                 HStack
                                 {
                                     CheckBox(checked: job.isItemComplete(itemIndex: index)!)
-                                        .transaction
-                                        {(transaction) in
-                                            transaction.animation = nil
-                                        }
                                     Text(job.getItem(at: index)!)
                                         .font(.body)
                                         .textRenderer(StrikethroughRenderer(
@@ -240,6 +233,10 @@ struct JobDetailScreen: View
                                             color: .textSecondary, lineWidth: 1))
                                         .foregroundStyle(job.isItemComplete(itemIndex: index)! ?
                                             .textSecondary : .textPrimary)
+                                        .transaction
+                                        {(transaction) in
+                                            transaction.animation = .linear
+                                        }
                                     Spacer()
                                 }
                                 .padding(.vertical, 12)
