@@ -32,21 +32,22 @@ struct MainView: View
                 {
                     JobTracker(jobNavVM, jobs: $jobs)
                         .navigationDestination(for: Screen.self)
-                    {(screen) in
-                        switch screen
-                        {
-                            case .addJob:
-                                AddJobScreen(jobNavVM, jobs: $jobs)
-                            case .confirmJobDetails:
-                                ConfirmJobDetailsScreen(navVM: jobNavVM)
-                            case let .jobDetail(jobIndex):
-                                JobDetailScreen(jobNavVM, $currentTab, jobs: $jobs, jobIndex: jobIndex)
-                            case let .editSteps(jobIndex):
-                                EditStepsScreen(jobNavVM, jobs: $jobs, jobIndex: jobIndex)
-                            default:
-                                self
+                        {(screen) in
+                            switch screen
+                            {
+                                case .addJob:
+                                    AddJobScreen(jobNavVM, jobs: $jobs)
+                                case .confirmJobDetails:
+                                    ConfirmJobDetailsScreen(navVM: jobNavVM)
+                                case let .jobDetail(jobIndex):
+                                    JobDetailScreen(jobNavVM, $currentTab, jobs: $jobs,
+                                                    jobIndex: jobIndex)
+                                case let .editSteps(jobIndex):
+                                    EditStepsScreen(jobNavVM, jobs: $jobs, jobIndex: jobIndex)
+                                default:
+                                    self
+                            }
                         }
-                    }
                 }
             }
             Tab("", systemImage: "leaf.fill", value: .garden) // garden
