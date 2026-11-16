@@ -216,10 +216,16 @@ struct JobDetailScreen: View
                             {
                                 HStack
                                 {
-                                    CheckBox(checked: job.isItemComplete(itemIndex: index))
+                                    CheckBox(checked: job.isItemComplete(itemIndex: index)!)
                                     Text(job.getItem(at: index)!)
                                         .font(.body)
-                                        .foregroundStyle(job.isItemComplete(itemIndex: index) ?
+                                        .strikethrough(job.isItemComplete(itemIndex: index)!,
+                                                       color: .textSecondary)
+                                        .transaction
+                                        {(transaction) in
+                                            transaction.animation = .linear
+                                        }
+                                        .foregroundStyle(job.isItemComplete(itemIndex: index)! ?
                                             .textSecondary : .textPrimary)
                                     Spacer()
                                 }
