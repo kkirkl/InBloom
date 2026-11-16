@@ -23,12 +23,129 @@ struct EditStepsScreen: View
     @Binding private var jobs:[Job]
     @Binding private var job:Job
     @State private var showAddMenu:Bool = false // should be false unless testing
-    @State private var newStepField:String = ""
+    @State private var showEditMenu:Bool = false
+    @State private var newItemField:String = ""
+    @State private var editItemField:String = ""
+    @State private var editedItemOldValue:String = ""
+    @State private var editedItemIndex:Int?
     
     var isAddButtonEnabled:Bool
     {
-        !newStepField.isEmpty
+        !newItemField.isEmpty
     }
+    
+    var isSaveButtonEnabled:Bool
+    {
+        !editItemField.isEmpty && (editItemField != editedItemOldValue) && (editedItemIndex != nil)
+    }
+    
+    var addOrEditSheet: some View
+    {
+        DefaultVStack(alignment: .leading)
+        {
+            HStack
+            {
+                if showAddMenu
+                {
+                    Text("Add a step")
+                        .section()
+                } else if showEditMenu
+                {
+                    Text("Edit this step")
+                        .section()
+                } else
+                {
+                    Text("Error!")
+                        .section()
+                }
+                Spacer()
+            }
+            VStack(alignment: .leading, spacing: 0)
+            {
+                if showAddMenu
+                {
+                    Text("New step")
+                        .caption()
+                    TextField("new step field", text: $newItemField,
+                              prompt: Text("Enter new step here"))
+                        .font(.body)
+                        .foregroundStyle(.textPrimary)
+                } else if showEditMenu
+                {
+                    Text("Updated step")
+                        .caption()
+                    TextField("edited step field", text: $editItemField,
+                              prompt: Text("Enter updated step here"))
+                        .font(.body)
+                        .foregroundStyle(.textPrimary)
+                }
+            }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
+            .background
+            {
+                RoundedRectBackground(color: .backgroundSurface, cornerRadius: 12, borderColor: .borderDefault, borderWidth: 1)
+            }
+            .focused($focusedField, equals: showAddMenu ? .newStep : .editStep)
+            if showAddMenu
+            {
+                Text("This will be added to your checklist")
+                    .caption()
+            }
+            Spacer()
+            Button
+            {
+                if showAddMenu
+                {
+                    job = job.addItem(newItem: newItemField)
+                    showAddMenu = false
+                    newItemField = ""
+                } else if showEditMenu
+                {
+                    if let editedItemIndex
+                    {
+                        job = job.setItem(at: editedItemIndex, newItem: editItemField)!
+                    }
+                    showEditMenu = false
+                    editedItemIndex = nil
+                    editItemField = ""
+                }
+            } label:
+            {
+                if showAddMenu
+                {
+                    Text("+ Add")
+                        .foregroundStyle(isAddButtonEnabled ? .textOnPrimary : .textDisabled)
+                        .padding(.vertical, buttonInternalPadding)
+                        .frame(maxWidth: .infinity)
+                        .background
+                        {
+                            RoundedRectBackground(color: isAddButtonEnabled ?
+                                                         .brandPrimary : .stateDisabled,
+                                                  cornerRadius: buttonCornerRadius)
+                        }
+                } else if showEditMenu
+                {
+                    Text("Save changes")
+                        .foregroundStyle(isSaveButtonEnabled ? .textOnPrimary : .textDisabled)
+                        .padding(.vertical, buttonInternalPadding)
+                        .frame(maxWidth: .infinity)
+                        .background
+                        {
+                            RoundedRectBackground(color: isSaveButtonEnabled ?
+                                                         .brandPrimary : .stateDisabled,
+                                                  cornerRadius: buttonCornerRadius)
+                        }
+                }
+            }
+            .font(.button)
+            .disabled(!((showAddMenu && isAddButtonEnabled) !=
+                        (showEditMenu && isSaveButtonEnabled)))
+        }
+        .presentationDetents([.fraction(2 / 5)])
+        .presentationDragIndicator(.visible)
+    }
+    
     
     init(_ navVM:NavigationViewModel, jobs:Binding<[Job]>, jobIndex:Int)
     {
@@ -54,8 +171,7 @@ struct EditStepsScreen: View
                         {
                             withAnimation(.interactiveSpring)
                             {
-//                                job.items.remove(at: index)
-//                                job.itemCompletion.remove(at: index)
+                                job = job.removeItem(at: index)!
                             }
                         } label:
                         {
@@ -63,10 +179,21 @@ struct EditStepsScreen: View
                                 .font(.section)
                                 .foregroundStyle(.stateError)
                         }
-                        Text(job.getItem(at: index)!)
-                            .font(.body)
-                            .foregroundStyle(.textPrimary)
-                        Spacer()
+                        .buttonStyle(.borderless)
+                        Button
+                        {
+                            editedItemOldValue = job.getItem(at: index) ?? ""
+                            editItemField = editedItemOldValue
+                            editedItemIndex = index
+                            showEditMenu = true
+                        } label:
+                        {
+                            Text(job.getItem(at: index)!)
+                                .font(.body)
+                                .foregroundStyle(.textPrimary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .buttonStyle(.borderless)
                         Image(systemName: "circle.grid.3x3.fill")
                             .foregroundStyle(.textSecondary)
                         
@@ -109,7 +236,7 @@ struct EditStepsScreen: View
                     .frame(maxWidth: .infinity)
                     .background
                     {
-                        RoundedRectBackground(color: .clear,
+                        RoundedRectBackground(color: .backgroundSurface,
                                               cornerRadius: 16,
                                               borderColor: .brandPrimary,
                                               borderWidth: 2,
@@ -146,52 +273,11 @@ struct EditStepsScreen: View
         }
         .sheet(isPresented: $showAddMenu)
         {
-            DefaultVStack(alignment: .leading)
-            {
-                HStack
-                {
-                    Text("Add a step")
-                        .section()
-                    Spacer()
-                }
-                VStack(alignment: .leading, spacing: 0)
-                {
-                    Text("New step")
-                        .caption()
-                    TextField("new step field", text: $newStepField,
-                              prompt: Text("Enter new step here"))
-                }
-                .padding(.vertical, 12)
-                .padding(.horizontal, 16)
-                .background
-                {
-                    RoundedRectBackground(color: .backgroundSurface, cornerRadius: 12, borderColor: .borderDefault, borderWidth: 1)
-                }
-                .focused($focusedField, equals: .newStep)
-                Text("This will be added to your checklist")
-                    .caption()
-                Spacer()
-                Button
-                {
-                    job = job.addItem(newItem: newStepField)
-                    newStepField = ""
-                    showAddMenu = false
-                } label:
-                {
-                    Text("+ Add")
-                        .font(.button)
-                        .foregroundStyle(isAddButtonEnabled ? .textOnPrimary : .textDisabled)
-                        .padding(.vertical, buttonInternalPadding)
-                        .frame(maxWidth: .infinity)
-                        .background
-                        {
-                            RoundedRectBackground(color: isAddButtonEnabled ? .brandPrimary : .stateDisabled, cornerRadius: buttonCornerRadius)
-                        }
-                }
-                .disabled(!isAddButtonEnabled)
-            }
-            .presentationDetents([.fraction(2 / 5)])
-            .presentationDragIndicator(.visible)
+            addOrEditSheet
+        }
+        .sheet(isPresented: $showEditMenu)
+        {
+            addOrEditSheet
         }
     }
 }
