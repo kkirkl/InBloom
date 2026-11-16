@@ -15,10 +15,17 @@ struct StrikethroughRenderer: TextRenderer
         get {_progress}
         set {_progress = newValue}
     }
-//    var elapsed
+
     var color:Color
     var lineWidth:CGFloat
-    private var _progress:CGFloat = 0
+    var _progress:CGFloat
+    
+    init(enabled:Bool, color:Color, lineWidth:CGFloat, _progress:CGFloat = 0)
+    {
+        self.color = color
+        self.lineWidth = lineWidth
+        self._progress = enabled ? 1 : 0
+    }
     
     func draw(layout:Text.Layout, in ctx: inout GraphicsContext)
     {

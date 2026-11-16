@@ -48,6 +48,10 @@ struct JobDetailScreen: View
         {
             RoundedRectBackground(color: .brandPrimaryLight, cornerRadius: 16)
         }
+        .transaction
+        {(transaction) in
+            transaction.animation = nil
+        }
     }
     
     var viewPlant: some View
@@ -140,11 +144,11 @@ struct JobDetailScreen: View
                             Image(.emptyPot)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                            PlantView(job: job)
                                 .transaction
                                 {(transaction) in
-                                    transaction.animation = .linear
+                                    transaction.animation = nil
                                 }
+                            PlantView(job: job)
                         }
                         .frame(width: 80, height: 101)
                     }
@@ -156,19 +160,23 @@ struct JobDetailScreen: View
                         Text(job.plantStage().description)
                             .section()
                             .padding(.top, -3)
+                            .transaction
+                            {(transaction) in
+                                transaction.animation = nil
+                            }
                         ProgressView(value: job.completionPercentage())
                             .background(.backgroundDefault)
                             .clipShape(.capsule)
                             .tint(.brandPrimary)
-                            .transaction
-                            {(transaction) in
-                                transaction.animation = .easeInOut
-                            }
                             .scaleEffect(x: 1, y: 2)
                         Text("\(job.completedCount()) of \(job.itemCount()) "
                              + "· next stage in \(job.itemsTillNextStage()) "
                              + "step\(job.itemsTillNextStage() == 1 ? "" : "s" )")
                             .caption()
+                            .transaction
+                            {(transaction) in
+                                transaction.animation = nil
+                            }
                     }
                     .padding(.leading, 16)
                 }
@@ -211,7 +219,11 @@ struct JobDetailScreen: View
                         {(index) in
                             Button
                             {
-                                job = job.itemToggled(at: index) ?? job
+                                withAnimation
+                                {
+                                    job = job.itemToggled(at: index) ?? job
+                                }
+                                
                             } label:
                             {
                                 HStack
@@ -219,13 +231,9 @@ struct JobDetailScreen: View
                                     CheckBox(checked: job.isItemComplete(itemIndex: index)!)
                                     Text(job.getItem(at: index)!)
                                         .font(.body)
-//                                        .strikethrough(job.isItemComplete(itemIndex: index)!,
-//                                                       color: .textSecondary)
-                                        .textRenderer(StrikethroughRenderer(color: .textSecondary, lineWidth: 2))
-                                        .transaction
-                                        {(transaction) in
-                                            transaction.animation = .linear
-                                        }
+                                        .textRenderer(StrikethroughRenderer(
+                                            enabled: job.isItemComplete(itemIndex: index)!,
+                                            color: .textSecondary, lineWidth: 1))
                                         .foregroundStyle(job.isItemComplete(itemIndex: index)! ?
                                             .textSecondary : .textPrimary)
                                     Spacer()
