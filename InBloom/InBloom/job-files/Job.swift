@@ -135,7 +135,8 @@ struct Job: Hashable, Identifiable
         {
             return 0
         }
-        let nextStagePercentage:Double = Double(stageIndex + 1) / Double(PlantStage.allCases.count - 1)
+        let nextStagePercentage:Double =
+            Double(stageIndex + 1) / Double(PlantStage.allCases.count - 1)
         let neededItems:Int = Int(ceil(nextStagePercentage * Double(items)))
         return neededItems - completed
     }
@@ -172,7 +173,7 @@ struct Job: Hashable, Identifiable
     
     func setItem(at itemIndex:Int, newItem:String) -> Job?
     {
-        guard itemIndex < items.count else {return nil}
+        guard 0 <= itemIndex && itemIndex < items.count else {return nil}
         
         var newItems:[String] = items
         newItems[itemIndex] = newItem
@@ -195,7 +196,7 @@ struct Job: Hashable, Identifiable
     
     func removeItem(at itemIndex:Int) -> Job?
     {
-        guard itemIndex < items.count else {return nil}
+        guard 0 <= itemIndex && itemIndex < items.count else {return nil}
         
         var newItems:[String] = items
         var newCompleted:[Bool] = itemCompletion
@@ -236,7 +237,7 @@ struct Job: Hashable, Identifiable
     
     func itemToggled(at itemIndex:Int) -> Job?
     {
-        guard itemIndex < items.count else {return nil}
+        guard 0 <= itemIndex && itemIndex < items.count else {return nil}
         
         // should always be parallel with items, so it's safe to unwrap
         var newCompletions:[Bool] = itemCompletion
@@ -292,12 +293,5 @@ struct Job: Hashable, Identifiable
         return Job(company: company, title: title, items: items, itemCompletion: itemCompletion,
                    isSaved: saved, link: link, applicationGoal: applicationGoal,
                    applicationDeadline: newDeadline)
-    }
-    
-    static func getJobDeadlineString(date:Date) -> String
-    {
-        let dateFormatter:DateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        return dateFormatter.string(from: date)
     }
 }
