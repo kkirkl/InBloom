@@ -169,19 +169,6 @@ struct EditStepsScreen: View
                     {
                         Button
                         {
-                            withAnimation(.interactiveSpring)
-                            {
-                                job = job.removeItem(at: index)!
-                            }
-                        } label:
-                        {
-                            Image(systemName: "minus.circle.fill")
-                                .font(.section)
-                                .foregroundStyle(.stateError)
-                        }
-                        .buttonStyle(.borderless)
-                        Button
-                        {
                             editedItemOldValue = job.getItem(at: index) ?? ""
                             editItemField = editedItemOldValue
                             editedItemIndex = index
@@ -191,16 +178,15 @@ struct EditStepsScreen: View
                             Text(job.getItem(at: index)!)
                                 .font(.body)
                                 .foregroundStyle(.textPrimary)
+                                .multilineTextAlignment(.leading)
+                                .padding(.leading, 24)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .buttonStyle(.borderless)
-                        Image(systemName: "circle.grid.3x3.fill")
-                            .foregroundStyle(.textSecondary)
                         
                     }
                     .padding(.vertical, 12)
                     .padding(.horizontal, 16)
-                    .frame(maxWidth: .infinity)
                     .background
                     {
                         RoundedRectBackground(color: .backgroundSurface,
@@ -220,8 +206,9 @@ struct EditStepsScreen: View
                 {(sourceIndexSet, destIndex) in
                     job = job.moveItems(fromOffsets: sourceIndexSet, toOffset: destIndex)
                 }
-                .frame(width: 360)
+                .frame(width: 354)
             }
+            .environment(\.editMode, .constant(.active))
             .listStyle(.plain)
             .listRowSpacing(-22)
             Button

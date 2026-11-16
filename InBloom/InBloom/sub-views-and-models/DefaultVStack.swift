@@ -33,10 +33,10 @@ struct DefaultVStack<Content:View>: View
                 .padding(padding)
         }
         .tint(.brandPrimary)
-        .onTapGesture
-        {
-            hideKeyboard()
-        }
+//        .onTapGesture
+//        {
+//            hideKeyboard()
+//        }
     }
 }
 
