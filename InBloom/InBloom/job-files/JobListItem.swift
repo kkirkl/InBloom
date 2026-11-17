@@ -50,7 +50,7 @@ struct JobListItem: View
                     {
                         Button
                         {
-                            job = job.savedToggled()
+                            job.toggleSaved()
                         } label:
                         {
                             Text("Saved")

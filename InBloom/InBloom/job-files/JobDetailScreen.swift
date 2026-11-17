@@ -15,6 +15,8 @@ struct JobDetailScreen: View
     @Binding private var job:Job
     var jobIndex:Int
     
+    let plantAnimationTime:CGFloat = 0.5
+    
     var nextStepMessage:String
     {
         let nextStep:String? = job.nextItem()
@@ -108,7 +110,7 @@ struct JobDetailScreen: View
                 {
                     Button
                     {
-                        job = job.savedToggled()
+                        job.toggleSaved()
                     } label:
                     {
                         Text("Saved")
@@ -145,6 +147,10 @@ struct JobDetailScreen: View
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                             PlantView(job: job)
+                                .transaction
+                                {(transaction) in
+                                    transaction.animation = .easeOut(duration: plantAnimationTime)
+                                }
                         }
                         .frame(width: 80, height: 101)
                     }
@@ -156,15 +162,15 @@ struct JobDetailScreen: View
                         Text(job.plantStage().description)
                             .section()
                             .padding(.top, -3)
-//                            .transaction
-//                            {(transaction) in
-//                                transaction.animation = nil
-//                            }
                         ProgressView(value: job.completionPercentage())
                             .background(.backgroundDefault)
                             .clipShape(.capsule)
                             .tint(.brandPrimary)
                             .scaleEffect(x: 1, y: 2)
+                            .transaction
+                            {(transaction) in
+                                transaction.animation = .easeInOut(duration: plantAnimationTime)
+                            }
                         Text("\(job.completedCount()) of \(job.itemCount()) "
                              + "· next stage in \(job.itemsTillNextStage()) "
                              + "step\(job.itemsTillNextStage() == 1 ? "" : "s" )")
@@ -211,24 +217,21 @@ struct JobDetailScreen: View
                         {(index) in
                             Button
                             {
-                                DispatchQueue.main.async
-                                {
-                                    withAnimation(.easeInOut(duration: 5))
-                                    {
-                                        job = job.itemToggled(at: index) ?? job
-                                    }
-                                    
-                                }
+                                job.toggleItem(at: index)
                             } label:
                             {
                                 HStack
                                 {
                                     CheckBox(checked: job.isItemComplete(itemIndex: index)!)
+                                        .transaction
+                                        {(transaction) in
+                                            transaction.animation = nil
+                                        }
                                     Text(job.getItem(at: index)!)
                                         .font(.body)
                                         .textRenderer(StrikethroughRenderer(
                                             enabled: job.isItemComplete(itemIndex: index)!,
-                                            color: .textSecondary, lineWidth: 1))
+                                            color: .textPrimary, lineWidth: 1))
                                         .foregroundStyle(job.isItemComplete(itemIndex: index)! ?
                                             .textSecondary : .textPrimary)
                                         .multilineTextAlignment(.leading)

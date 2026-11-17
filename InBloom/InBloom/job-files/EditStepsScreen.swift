@@ -97,14 +97,14 @@ struct EditStepsScreen: View
             {
                 if showAddMenu
                 {
-                    job = job.addItem(newItem: newItemField)
+                    job.addItem(newItem: newItemField)
                     showAddMenu = false
                     newItemField = ""
                 } else if showEditMenu
                 {
                     if let editedItemIndex
                     {
-                        job = job.setItem(at: editedItemIndex, newItem: editItemField)!
+                        job.setItem(at: editedItemIndex, newItem: editItemField)
                     }
                     showEditMenu = false
                     editedItemIndex = nil
@@ -173,7 +173,7 @@ struct EditStepsScreen: View
                         {
                             withAnimation(.interactiveSpring)
                             {
-                                job = job.removeItem(at: index)!
+                                job.removeItem(at: index)
                             }
                         } label:
                         {
@@ -218,11 +218,11 @@ struct EditStepsScreen: View
                 }
                 .onDelete
                 {(indexSet) in
-                    job = job.removeItems(atOffsets: indexSet)
+                    job.removeItems(atOffsets: indexSet)
                 }
                 .onMove
                 {(sourceIndexSet, destIndex) in
-                    job = job.moveItems(fromOffsets: sourceIndexSet, toOffset: destIndex)
+                    job.moveItems(fromOffsets: sourceIndexSet, toOffset: destIndex)
                 }
 //                .frame(width: 360)
             }

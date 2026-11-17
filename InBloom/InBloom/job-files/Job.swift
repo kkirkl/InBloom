@@ -21,8 +21,13 @@ func filteredJobs(_ jobs:[Job], filter:JobFilter) -> [Job]
     return savedJobs
 }
 
-struct Job: Hashable, Identifiable
+@Observable class Job: Identifiable
 {
+    static func == (lhs: borrowing Job, rhs: borrowing Job) -> Bool
+    {
+        lhs.id == rhs.id
+    }
+    
     static let defaultItems:[String] = ["Research company", "Tailor resume",
                                         "Write/review cover letter", "Email hiring manager"]
     
@@ -62,7 +67,7 @@ struct Job: Hashable, Identifiable
         self.title = title
         self.items = items
         self.itemCompletion = itemCompletion
-        if self.itemCompletion.count != self.items.count
+        if itemCompletion.count != items.count
         {
             self.itemCompletion = Array(repeating: false, count: items.count)
         }
@@ -146,11 +151,9 @@ struct Job: Hashable, Identifiable
         return company
     }
     
-    func setCompany(newCompany:String) -> Job
+    func setCompany(newCompany:String)
     {
-        return Job(company: newCompany, title: title, items: items, itemCompletion: itemCompletion,
-                   isSaved: saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        company = newCompany
     }
     
     func getTitle() -> String
@@ -158,76 +161,48 @@ struct Job: Hashable, Identifiable
         return title
     }
     
-    func setTitle(newTitle:String) -> Job
+    func setTitle(newTitle:String)
     {
-        return Job(company: company, title: newTitle, items: items, itemCompletion: itemCompletion,
-                   isSaved: saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        title = newTitle
     }
     
     func getItem(at itemIndex:Int) -> String?
     {
-        guard itemIndex < items.count else {return nil}
+        guard 0 <= itemIndex && itemIndex < items.count else {return nil}
         return items[itemIndex]
     }
     
-    func setItem(at itemIndex:Int, newItem:String) -> Job?
+    func setItem(at itemIndex:Int, newItem:String)
     {
-        guard 0 <= itemIndex && itemIndex < items.count else {return nil}
-        
-        var newItems:[String] = items
-        newItems[itemIndex] = newItem
-        return Job(company: company, title: title, items: newItems, itemCompletion: itemCompletion,
-                   isSaved: saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        guard 0 <= itemIndex && itemIndex < items.count else {return}
+        items[itemIndex] = newItem
     }
     
-    func addItem(newItem:String) -> Job
+    func addItem(newItem:String)
     {
-        var newItems:[String] = items
-        var newCompletions:[Bool] = itemCompletion
-        newItems.append(newItem)
-        newCompletions.append(false)
-        
-        return Job(company: company, title: title, items: newItems, itemCompletion: newCompletions,
-                   isSaved: saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        items.append(newItem)
+        itemCompletion.append(false)
     }
     
-    func removeItem(at itemIndex:Int) -> Job?
+    func removeItem(at itemIndex:Int)
     {
-        guard 0 <= itemIndex && itemIndex < items.count else {return nil}
+        guard 0 <= itemIndex && itemIndex < items.count else {return}
         
-        var newItems:[String] = items
-        var newCompleted:[Bool] = itemCompletion
-        newItems.remove(at: itemIndex)
-        newCompleted.remove(at: itemIndex)
-        return Job(company: company, title: title, items: newItems, itemCompletion: newCompleted,
-                   isSaved: saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        items.remove(at: itemIndex)
+        itemCompletion.remove(at: itemIndex)
         
     }
     
-    func removeItems(atOffsets offsets:IndexSet) -> Job
+    func removeItems(atOffsets offsets:IndexSet)
     {
-        var newItems:[String] = items
-        var newCompleted:[Bool] = itemCompletion
-        newItems.remove(atOffsets: offsets)
-        newCompleted.remove(atOffsets: offsets)
-        return Job(company: company, title: title, items: newItems, itemCompletion: newCompleted,
-                   isSaved: saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        items.remove(atOffsets: offsets)
+        itemCompletion.remove(atOffsets: offsets)
     }
     
-    func moveItems(fromOffsets:IndexSet, toOffset:Int) -> Job
+    func moveItems(fromOffsets:IndexSet, toOffset:Int)
     {
-        var newItems:[String] = items
-        var newCompleted:[Bool] = itemCompletion
-        newItems.move(fromOffsets: fromOffsets, toOffset: toOffset)
-        newCompleted.move(fromOffsets: fromOffsets, toOffset: toOffset)
-        return Job(company: company, title: title, items: newItems, itemCompletion: newCompleted,
-                   isSaved: saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        items.move(fromOffsets: fromOffsets, toOffset: toOffset)
+        itemCompletion.move(fromOffsets: fromOffsets, toOffset: toOffset)
     }
     
     func isItemComplete(itemIndex:Int) -> Bool?
@@ -236,16 +211,10 @@ struct Job: Hashable, Identifiable
         return itemCompletion[itemIndex]
     }
     
-    func itemToggled(at itemIndex:Int) -> Job?
+    func toggleItem(at itemIndex:Int)
     {
-        guard 0 <= itemIndex && itemIndex < items.count else {return nil}
-        
-        // should always be parallel with items, so it's safe to unwrap
-        var newCompletions:[Bool] = itemCompletion
-        newCompletions[itemIndex].toggle()
-        return Job(company: company, title: title, items: items, itemCompletion: newCompletions,
-                   isSaved: saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        guard 0 <= itemIndex && itemIndex < items.count else {return}
+        itemCompletion[itemIndex].toggle()
     }
     
     func isSaved() -> Bool
@@ -253,11 +222,9 @@ struct Job: Hashable, Identifiable
         return saved
     }
     
-    func savedToggled() -> Job
+    func toggleSaved()
     {
-        return Job(company: company, title: title, items: items, itemCompletion: itemCompletion,
-                   isSaved: !saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        saved.toggle()
     }
     
     func getLink() -> String?
@@ -265,11 +232,9 @@ struct Job: Hashable, Identifiable
         return link
     }
     
-    func setLink(newLink:String) -> Job
+    func setLink(newLink:String)
     {
-        return Job(company: company, title: title, items: items, itemCompletion: itemCompletion,
-                   isSaved: saved, link: newLink, applicationGoal: applicationGoal,
-                   applicationDeadline: applicationDeadline)
+        link = newLink
     }
     
     func getApplicationGoal() -> Date?
@@ -277,11 +242,9 @@ struct Job: Hashable, Identifiable
         return applicationGoal
     }
     
-    func setApplicationGoal(newGoal:Date) -> Job
+    func setApplicationGoal(newGoal:Date)
     {
-        return Job(company: company, title: title, items: items, itemCompletion: itemCompletion,
-                   isSaved: saved, link: link, applicationGoal: newGoal,
-                   applicationDeadline: applicationDeadline)
+        applicationGoal = newGoal
     }
     
     func getApplicationDeadline() -> Date?
@@ -289,10 +252,8 @@ struct Job: Hashable, Identifiable
         return applicationDeadline
     }
     
-    func setApplicationDeadline(newDeadline:Date) -> Job
+    func setApplicationDeadline(newDeadline:Date)
     {
-        return Job(company: company, title: title, items: items, itemCompletion: itemCompletion,
-                   isSaved: saved, link: link, applicationGoal: applicationGoal,
-                   applicationDeadline: newDeadline)
+       applicationDeadline = newDeadline
     }
 }
